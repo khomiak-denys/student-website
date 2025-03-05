@@ -1,0 +1,244 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 50px;
+}
+
+button {
+    width: 150px;
+    height: 30px;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 2px;
+    padding: 10px 20px;
+    font-size: 20px;
+    cursor: pointer;
+    text-align: left;
+
+
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0px;
+    gap: 0px; /* Відступи між кнопками */
+    align-items: flex-start; /* Центрує кнопки по горизонталі */
+    margin-top: 0px; /* Відступ від заголовка */
+}
+
+
+.text-box {
+    position: absolute;
+    top: 0px; 
+    left: 5px; 
+    font-size: 15px;
+    color: white;
+    background-color: none;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: #999;
+    padding: 10px 20px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+.notification {
+    position: relative;
+    margin-right: 10px;
+    cursor: pointer;
+    scale: 100%;
+}
+
+.bell-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.profile-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.notification-dot {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 6px;
+    height: 6px;
+    background-color: red;
+    border-radius: 50%;
+
+    animation: blink 1s infinite alternate;
+}
+@keyframes blink {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+       }
+       100% {
+        opacity: 0.1;
+        transform: scale(1.1);
+       }
+}
+
+.notification:hover .notification-dot {
+    display: block;
+}
+
+/* Tooltip для сповіщень */
+.tooltip {
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.notification:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 👤 Профіль */
+.profile {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-right: 10px;
+}
+
+.profile:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Dropdown меню */
+.dropdown {
+    position: absolute;
+    top: 100%; /* Змінено, щоб не було проміжку */
+    right: 0;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    padding: 10px;
+    width: 120px;
+    display: none;
+}
+
+/* Елементи меню */
+.dropdown p {
+    margin: 5px 0;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.dropdown p:hover {
+    background-color: #ddd;
+}
+
+/* Відображення меню */
+.profile:hover .dropdown,
+.dropdown:hover {
+    display: block;
+}
+
+table {
+    width: 80%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+h2 {
+    text-align: left;
+}
+
+th, td {
+    border: 2px solid black;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.status {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.active {
+    background-color: green;
+}
+
+.inactive {
+    background-color: lightgray;
+}
+
+.btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.btn img {
+    width: 20px;
+    height: 20px;
+}
+
+.pagination {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid black;
+    margin: 2px;
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+}
+
+.pagination a.active {
+    background-color: black;
+    color: white;
+}
+
+.checkbox-cell {
+    text-align: center;
+    width: 40px;
+}
+
+

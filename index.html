@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1></h1>
+
+    <div class="button-container">
+        <button id="dashBoardBtn">Dashboard</button>
+        <button id="studentsBtn">Students</button>
+        <button id="tasksBtn">Tasks</button>
+    </div>
+
+    <div class="text-box">CMS</div>
+
+    <div class="header">
+        <div class="notification">
+            <img src="notification-icon.png" alt="Сповіщення" class="bell-icon">
+            <span class="notification-dot"></span>
+            <div class="tooltip">3 unread messagess</div>
+        </div>
+        <div class="profile">
+            <img src="profile-icon.png" alt="Профіль" class="profile-icon">
+            <span class="profile-name">James Bond</span>
+            <div class="dropdown">
+                <p>Profile</p>
+                <p>Logout</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+
+
+    <h2>Students</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Group</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Birthday</th>
+                <th>Status</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="checkbox" checked></td>
+                <td><b>KN-21</b></td>
+                <td><b>John Smith</b></td>
+                <td>M</td>
+                <td><b>11.05.2004</b></td>
+                <td><span class="status active"></span></td>
+                <td>
+                    <button class="btn">✏️</button>
+                    <button class="btn">❌</button>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="checkbox"></td>
+                <td><b>KN-22</b></td>
+                <td>Ann Bond</td>
+                <td>F</td>
+                <td><b>24.04.2004</b></td>
+                <td><span class="status inactive"></span></td>
+                <td>
+                    <button class="btn">✏️</button>
+                    <button class="btn">❌</button>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="checkbox"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <a href="#">&#60;</a>
+        <a href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">&#62;</a>
+    </div>
+
+</body>
+</html>
