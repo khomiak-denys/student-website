@@ -1,11 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const buttons = document.querySelectorAll(".nav-btn");
+    const menuItems = document.querySelectorAll(".sidebar p");
 
-    buttons.forEach(button => {
-        button.addEventListener("click", function () {
-            buttons.forEach(btn => btn.classList.remove("active"));
-            this.classList.add("active");
+    menuItems.forEach(item => {
+        item.addEventListener("click", function () {
+            // Видаляємо клас activeBtn у всіх кнопок
+            menuItems.forEach(el => el.classList.remove("activeBtn"));
+            // Додаємо activeBtn до натиснутої кнопки
+            this.classList.add("activeBtn");
         });
     });
 });
-

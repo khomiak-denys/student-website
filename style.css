@@ -3,7 +3,6 @@ body {
     text-align: center;
     margin: 50px;
 }
-
 button {
     width: 150px;
     height: 30px;
@@ -15,20 +14,7 @@ button {
     font-size: 20px;
     cursor: pointer;
     text-align: left;
-
-
 }
-
-.button-container {
-    display: flex;
-    flex-direction: column;
-    padding-left: 0px;
-    gap: 0px; /* Відступи між кнопками */
-    align-items: flex-start; /* Центрує кнопки по горизонталі */
-    margin-top: 0px; /* Відступ від заголовка */
-}
-
-
 .text-box {
     position: absolute;
     top: 0px; 
@@ -119,7 +105,6 @@ button {
     opacity: 1;
     visibility: visible;
 }
-
 /* 👤 Профіль */
 .profile {
     position: relative;
@@ -131,11 +116,9 @@ button {
     transition: background-color 0.3s;
     margin-right: 10px;
 }
-
 .profile:hover {
     background-color: rgba(255, 255, 255, 0.3);
 }
-
 /* Dropdown меню */
 .dropdown {
     position: absolute;
@@ -155,25 +138,49 @@ button {
     padding: 5px;
     cursor: pointer;
 }
-
 .dropdown p:hover {
     background-color: #ddd;
 }
-
 /* Відображення меню */
 .profile:hover .dropdown,
 .dropdown:hover {
     display: block;
 }
 
-table {
-    width: 80%;
-    border-collapse: collapse;
-    margin-top: 20px;
+
+
+
+.container {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+/* Ліва панель (меню) */
+.sidebar {
+    width: 200px;
+    padding: 20px;
+    background-color: none;
+    height: 100vh;
+    text-align: left;
+}
+/* Стилі для кнопок меню */
+.sidebar p {
+    margin: 10px 0;
+    font-size: 18px;
+    cursor: pointer;
+}
+/* Контентна частина */
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    text-align: left;
 }
 
-h2 {
-    text-align: left;
+/* Стилі для таблиці */
+table {
+    width: 90%;
+    border-collapse: collapse;
+    margin-top: 10px;
 }
 
 th, td {
@@ -196,11 +203,29 @@ th {
 }
 
 .active {
-    background-color: green;
+    background-color: rgb(2, 206, 2);
 }
-
 .inactive {
     background-color: lightgray;
+}
+.activeBtn {
+    font-weight: bold;
+}
+
+.addStudentBtn {
+    position: absolute;
+    top: 50px;
+    right: 184px;
+
+    max-width: 30px;
+    max-height: 30px;
+    height: 30px;
+    width: 30px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    margin-top: 50px;
+    border: 2px solid black;
 }
 
 .btn {
@@ -217,7 +242,7 @@ th {
 }
 
 .pagination {
-    margin-top: 10px;
+    margin-top: -350px;
     text-align: center;
 }
 
@@ -240,5 +265,7 @@ th {
     text-align: center;
     width: 40px;
 }
+
+
 
 
