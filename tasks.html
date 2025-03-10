@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student website</title>
+    <link rel="stylesheet" href="tasks.css">
+</head>
+<body>
+
+    <div class="text-box">CMS</div>
+
+    <div class="header">
+        <div class="notification">
+            <img src="notification-icon.png" alt="Сповіщення" class="bell-icon">
+            <span class="notification-dot"></span>
+            <div class="tooltip">3 unread messages</div>
+            <div class="notifications-dropdown">
+                <div class="notification-item unread">
+                    <img src="profile-icon.png" alt="User Icon" class="profile-icon">
+                    <div class="notification-content">
+                        <p class="username"><em>John Doe</em></p>
+                        <p class="message">Liked a message</p>
+                    </div>
+                </div>
+                <div class="notification-item unread">
+                    <img src="profile-icon.png" alt="User Icon" class="profile-icon">
+                    <div class="notification-content">
+                        <p class="username"><em>Emmanuel Macron</em></p>
+                        <p class="message">Whats up?</p>
+                    </div>
+                </div>
+                <div class="notification-item unread">
+                    <img src="profile-icon.png" alt="User Icon" class="profile-icon">
+                    <div class="notification-content">
+                        <p class="username"><em>Taras Shevchenko</em></p>
+                        <p class="message">Sent you a videomessage</p>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+        <div class="profile">
+            <img src="profile-icon.png" alt="Профіль" class="profile-icon">
+            <span class="profile-name">Johny Sins</span>
+            <div class="dropdown">
+                <p>Profile</p>
+                <p>Logout</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <p onclick="window.location.href='dashboard.html'">Dashboard</p>
+            <p onclick="window.location.href='students.html'">Students</p>
+            <p class="activeBtn" onclick="window.location.href='tasks.html'">Tasks</p>
+        </div>
+
+        <div class="content">
+            <h2>Tasks</h2>
+        </div>
+    </div>
+
+   
+
+    <script src="script.js"></script>
+
+</body>
+</html>
