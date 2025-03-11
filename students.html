@@ -7,11 +7,9 @@
     <link rel="stylesheet" href="students.css">
 </head>
 <body>
-
-    <div class="text-box">CMS</div>
-
     <div class="header">
-        <div class="notification">
+        <div class="text-box">CMS</div>
+        <div class="notification header-notification">
             <img src="notification-icon.png" alt="Сповіщення" class="bell-icon">
             <span class="notification-dot"></span>
             <div class="tooltip">3 unread messages</div>
@@ -38,10 +36,8 @@
                     </div>
                 </div>
             </div>
-            
-            
         </div>
-        <div class="profile">
+        <div class="profile header-profile">
             <img src="profile-icon.png" alt="Профіль" class="profile-icon">
             <span class="profile-name">Johny Sins</span>
             <div class="dropdown">
@@ -56,72 +52,45 @@
             <p onclick="window.location.href='dashboard.html'">Dashboard</p>
             <p class="activeBtn" onclick="window.location.href='students.html'">Students</p>
             <p onclick="window.location.href='tasks.html'">Tasks</p>
+            
         </div>
 
         <div class="content">
-            <h2>Students</h2>
-            <button class="addStudentBtn">+</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Group</th>
-                        <th>Name</th>
-                        <th>Gender</th>
-                        <th>Birthday</th>
-                        <th>Status</th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="checkbox" checked></td>
-                        <td><b>KN-21</b></td>
-                        <td><b>John Smith</b></td>
-                        <td>M</td>
-                        <td><b>11.05.2004</b></td>
-                        <td><span class="status active"></span></td>
-                        <td>
-                            <button class="btn">✏️</button>
-                            <button class="btn">❌</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><b>KN-22</b></td>
-                        <td>Ann Bond</td>
-                        <td>F</td>
-                        <td><b>24.04.2004</b></td>
-                        <td><span class="status inactive"></span></td>
-                        <td>
-                            <button class="btn">✏️</button>
-                            <button class="btn">❌</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+            <h2>Students</h2>  
+            <button class="addStudentBtn">
+                <img src="add-icon.svg"></img> 
+            </button>          
+            <div class="table-wrapper">
+                <table id="studenstsTable">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Group</th>
+                            <th>Name</th>
+                            <th>Gender</th>
+                            <th>Birthday</th>
+                            <th>Status</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <a href="#"><</a>
+                    <a href="#">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">></a>
+                </div>
+
+            </div>
         </div>
     </div>
 
-    <div class="pagination">
-        <a href="#">&#60;</a>
-        <a href="#">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">4</a>
-        <a href="#">&#62;</a>
-    </div>
 
     <script src="script.js"></script>
-
 </body>
 </html>

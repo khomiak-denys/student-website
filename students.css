@@ -130,6 +130,7 @@ button {
     padding: 10px;
     width: 120px;
     display: none;
+    z-index: 10;
 }
 
 /* Елементи меню */
@@ -224,27 +225,38 @@ th:nth-child(7), td:nth-child(7) { width: 30%; }
 }
 
 .addStudentBtn {
-    position: absolute;
+    position: relative;
+    background-size: 30px 30px;
     top: 5%;
-    right: 4.5%;
-
-    max-width: 30px;
-    max-height: 30px;
+    right: 0%;
     height: 30px;
     width: 30px;
     display: flex; 
     align-items: center; 
     justify-content: center;
     margin-top: 50px;
-    border: 2px solid black;
+    border: 1px solid black;
+}
+.addStudentBtn:hover{
+    background-color : #c6c4c4;
+}
+
+.addStudentBtn img {
+    width: 30px;
+    height: 30px;
 }
 
 .btn {
-    border: none;
+    border: 1px solid black;
+    height: 30px;
+    width: 30px;
     background: none;
     cursor: pointer;
     font-size: 16px;
     padding: 5px;
+}
+.btn:hover {
+    background-color: #c6c4c4;
 }
 
 .btn img {
@@ -253,7 +265,7 @@ th:nth-child(7), td:nth-child(7) { width: 30%; }
 }
 
 .pagination {
-    margin-top: -350px;
+    margin-top: 5%;
     text-align: center;
 }
 
@@ -310,6 +322,7 @@ th:nth-child(7), td:nth-child(7) { width: 30%; }
 
 .username {
     font-weight: normal;
+    text-align: left;
     margin: 0;
 }
 
@@ -331,9 +344,4 @@ th:nth-child(7), td:nth-child(7) { width: 30%; }
     font-style: normal;
     color: black;
 }
-
-
-
-
-
 
