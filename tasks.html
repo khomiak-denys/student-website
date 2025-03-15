@@ -18,9 +18,41 @@
 
             <a class="navbar-brand" href="#">CMS</a>
 
+            <!-- Іконка сповіщень для мобільного вигляду -->
+            <div class="dropdown notification-wrapper d-lg-none ms-auto">
+                <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
+                    <img src="notification-icon.svg" alt="Сповіщення" class="bell-icon"> 
+                    <span class="notification-dot"></span>
+                </a>
+                <ul class="dropdown-menu notification-dropdown">
+                    <div class="notification-item unread">
+                        <img src="profile-icon.svg" alt="User Icon" class="profile-icon">
+                        <div class="notification-content">
+                            <p class="username"><em>John Doe</em></p>
+                            <p class="message">Liked a message</p>
+                        </div>
+                    </div>
+                    <div class="notification-item unread">
+                        <img src="profile-icon.svg" alt="User Icon" class="profile-icon">
+                        <div class="notification-content">
+                            <p class="username"><em>Emmanuel Macron</em></p>
+                            <p class="message">2 new messages</p>
+                        </div>
+                    </div>
+                    <div class="notification-item unread">
+                        <img src="profile-icon.svg" alt="User Icon" class="profile-icon">
+                        <div class="notification-content">
+                            <p class="username"><em>Vitalii Klychko</em></p>
+                            <p class="message">Sent you a videomessage</p>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+
+            <!-- Решта меню (включає сповіщення для десктопу) -->
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown d-none d-lg-block">
                         <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
                             <img src="notification-icon.svg" alt="Сповіщення" class="bell-icon"> 
                             <span class="notification-dot"></span>
@@ -31,6 +63,20 @@
                                 <div class="notification-content">
                                     <p class="username"><em>John Doe</em></p>
                                     <p class="message">Liked a message</p>
+                                </div>
+                            </div>
+                            <div class="notification-item unread">
+                                <img src="profile-icon.svg" alt="User Icon" class="profile-icon">
+                                <div class="notification-content">
+                                    <p class="username"><em>Emmanuel Macron</em></p>
+                                    <p class="message">2 new messages</p>
+                                </div>
+                            </div>
+                            <div class="notification-item unread">
+                                <img src="profile-icon.svg" alt="User Icon" class="profile-icon">
+                                <div class="notification-content">
+                                    <p class="username"><em>Vitalii Klychko</em></p>
+                                    <p class="message">Sent you a videomessage</p>
                                 </div>
                             </div>
                         </ul>
@@ -52,15 +98,22 @@
     <!-- Виїжджаюче меню (Sidebar) -->
     <div class="offcanvas offcanvas-start text-bg-dark" id="sidebarMenu">
         <div class="offcanvas-header">
-             <li class="nav-item dropdown d-none d-lg-block">
-                        <a class="nav-link profile-link" href="#" role="button" data-bs-toggle="dropdown">
-                            <img src="profile-icon.png" alt="Профіль" class="rounded-circle" width="30"> Johny Sins
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
-                        </ul>
-                    </li>
+            <!-- Dropdown для мобільного вигляду -->
+            <div class="dropdown d-lg-none">
+                <a class="nav-link text-white d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                    <img src="profile-icon.svg" alt="Профіль" class="rounded-circle me-2" width="40"> 
+                    <span>Johny Sins</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                </ul>
+            </div>
+            <!-- Статичне відображення для десктопу -->
+            <div class="d-none d-lg-flex align-items-center">
+                <img src="profile-icon.svg" alt="Профіль" class="rounded-circle me-2" width="40">
+                <h5 class="offcanvas-title">Johny Sins</h5>
+            </div>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
         </div>
         <div class="offcanvas-body">
@@ -78,8 +131,8 @@
             <nav class="col-md-2 d-none d-md-block sidebar p-3">
                 <ul class="nav flex-column">
                     <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link activeBtn" href="students.html">Students</a></li>
-                    <li class="nav-item"><a class="nav-link" href="tasks.html">Tasks</a></li>
+                    <li class="nav-item"><a class="nav-link" href="students.html">Students</a></li>
+                    <li class="nav-item"><a class="nav-link activeBtn" href="tasks.html">Tasks</a></li>
                 </ul>
             </nav>
 

@@ -10,12 +10,12 @@ addStudentBtn.addEventListener("click", function () {
             <td>F</td>
             <td><b>15.06.2003</b></td>
             <td><span class="status active"></span></td>
-            <td>
+            <td class="align-middle">
                 <button class="btn btn-sm btn-outline-secondary edit-btn">
-                    <img src="edit-icon.svg" class="icon">
+                    <i class="bi bi-pencil"></i>
                 </button>
                 <button class="btn btn-sm btn-outline-secondary delete-btn">
-                    <img src="remove-icon.svg" class="icon">
+                    <i class="bi bi-x-lg"></i>
                 </button>
             </td>
         </tr>
