@@ -1,11 +1,11 @@
 .nav-item.dropdown:hover .dropdown-menu {
     display: block;
-    background-color: transparent; /* Виправлено з "none" на "transparent" */
+    background-color: transparent; 
 }
 
 .nav-item.dropdown .dropdown-menu {
-    margin-top: 0; /* Запобігає зміщенню */
-    background-color: transparent; /* Виправлено з "none" на "transparent" */
+    margin-top: 0; 
+    background-color: transparent; 
 }
 
 .notification-item {
@@ -21,17 +21,25 @@
     border-bottom: none;
 }
 
+.profile-icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+}
+
 .profile-icon {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    margin-right: 10px;
+    margin-bottom: 5px; 
 }
 
 .username {
     font-weight: normal;
-    text-align: left;
+    text-align: center; 
     margin: 0;
+    font-size: 80%;
 }
 
 .message {
@@ -73,11 +81,10 @@
     height: 15px;
     border-radius: 50%;
     display: inline-block;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
 
 .active {
-    background-color: rgb(2, 206, 2);
+    background-color: green;
 }
 
 .inactive {
@@ -109,17 +116,20 @@ td {
     font-size: 20px;
 }
 
-.addStudent {
-    border-color: black;
+.action-btn {
     border: none;
-}
 
-.addStudent:hover {
-    background-color: grey;
+}
+.add-btn {
     border-color: black;
 }
 
-.addStudent:active {
+.add-btn:hover {
+    background-color: grey;
+    
+}
+
+.add-btn:active {
     background-color: grey !important;
 }
 
@@ -156,18 +166,16 @@ td {
         position: absolute;
         top: 35px !important;
         left: -120px !important;
-    
         max-width: 100vw;
         transform: translateX(0); 
         margin-top: 0.5rem;
     }
     .notification-wrapper {
-        margin-left: auto;
         display: flex;
         align-items: center;
     }
     .offcanvas-header .dropdown-menu {
-        background-color: white; /* Білий фон для dropdown у бургер-меню */
+        background-color: white; 
         color: black;
         border: none;
     }
@@ -180,11 +188,5 @@ td {
     .notification-dot {
         top: 3px;
         right: 3px;
-    }
-}
-
-@media (min-width: 992px) {
-    .notification-wrapper .nav-link {
-        padding: 0.5rem;
     }
 }
