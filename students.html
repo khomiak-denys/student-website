@@ -9,22 +9,22 @@
     <link rel="stylesheet" href="students.css">
 </head>
 <body>
-   
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
-            
+            <!-- Кнопка для бокового меню на малих екранах -->
             <button class="btn btn-dark d-lg-none me-3" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <a class="navbar-brand" href="#">CMS</a>
 
-            <div class="dropdown notification-wrapper d-lg-none ms-auto">
+            <!-- Сповіщення (залишаються в navbar) -->
+            <div class="dropdown notification-wrapper ms-auto me-3 position-relative">
                 <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
-                    <img src="notification-icon.svg" alt="Сповіщення" class="bell-icon"> 
+                    <i class="bi bi-bell bell-icon"></i>
                     <span class="notification-dot"></span>
                 </a>
-                <ul class="dropdown-menu notification-dropdown">
+                <ul class="dropdown-menu notification-dropdown dropdown-menu-end">
                     <div class="notification-item unread">
                         <div class="profile-icon-container">
                             <img src="profile-icon.svg" alt="User Icon" class="profile-icon">
@@ -46,75 +46,29 @@
                 </ul>
             </div>
 
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown d-none d-lg-block">
-                        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
-                            <img src="notification-icon.svg" alt="Сповіщення" class="bell-icon"> 
-                            <span class="notification-dot"></span>
-                        </a>
-                        <ul class="dropdown-menu notification-dropdown">
-                            <div class="notification-item unread">
-                                <div class="profile-icon-container">
-                                    <img src="profile-icon.svg" alt="User Icon" class="profile-icon">
-                                    <p class="username"><em>John D.</em></p>
-                                </div>
-                                <div class="notification-content">
-                                    <p class="message">Liked a message you sent</p>
-                                </div>
-                            </div>
-                            <div class="notification-item unread">
-                                <div class="profile-icon-container">
-                                    <img src="profile-icon.svg" alt="User Icon" class="profile-icon">
-                                    <p class="username"><em>Vitalii K.</em></p>
-                                </div>
-                                <div class="notification-content">
-                                    <p class="message">Sent you a videomessage</p>
-                                </div>
-                            </div>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown d-none d-lg-block">
-                        <a class="nav-link profile-link" href="#" role="button" data-bs-toggle="dropdown">
-                            <img src="profile-icon.svg" alt="Профіль" class="rounded-circle" width="30"> Johny Sins
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
+            <!-- Профіль (переміщується в offcanvas на малих екранах) -->
+            <div class="profile-wrapper d-flex align-items-center">
+                <div class="dropdown">
+                    <a class="nav-link profile-link text-white" href="#" role="button" data-bs-toggle="dropdown">
+                        <img src="profile-icon.svg" alt="Профіль" class="rounded-circle me-2" width="30"> Johny Sins
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
 
-   
+    <!-- Бокове меню для малих екранів -->
     <div class="offcanvas offcanvas-start text-bg-dark" id="sidebarMenu">
         <div class="offcanvas-header">
-            
-            <div class="dropdown d-lg-none">
-                <a class="nav-link text-white d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                    <img src="profile-icon.svg" alt="Профіль" class="rounded-circle me-2" width="40"> 
-                    <span>Johny Sins</span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li><a class="dropdown-item" href="#">Logout</a></li>
-                </ul>
-            </div>
-            
-            <div class="d-none d-lg-flex align-items-center">
-                <img src="profile-icon.svg" alt="Профіль" class="rounded-circle me-2" width="40">
-                <h5 class="offcanvas-title">Johny Sins</h5>
-            </div>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+            <!-- Профіль буде переміщено сюди через JS -->
+            <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="offcanvas"></button>
         </div>
         <div class="offcanvas-body">
-            <ul class="nav flex-column">
-                <li class="nav-item"><a class="nav-link text-white" href="dashboard.html">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="students.html">Students</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="tasks.html">Tasks</a></li>
-            </ul>
+            <!-- Сюди буде переміщено .sidebar-nav -->
         </div>
     </div>
 
@@ -122,7 +76,7 @@
         <div class="row">
             <!-- Бокове меню для великих екранів -->
             <nav class="col-md-2 d-none d-md-block sidebar p-3">
-                <ul class="nav flex-column">
+                <ul class="nav flex-column sidebar-nav">
                     <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link activeBtn" href="students.html">Students</a></li>
                     <li class="nav-item"><a class="nav-link" href="tasks.html">Tasks</a></li>
@@ -131,58 +85,59 @@
 
             <main class="col-md-10 ms-sm-auto px-md-4">
                 <h2 class="mt-4">Students</h2>
-                <button class="btn btn-outline-primary my-3 action-btn add-btn">
-                    <i class="bi bi-plus text-dark"></i>
-                </button>
-
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead class="table-dark">
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <th>Group</th>
-                                <th>Name</th>
-                                <th>Gender</th>
-                                <th>Birthday</th>
-                                <th>Status</th>
-                                <th>Options</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td><b>PZ-23</b></td>
-                                <td><b>John Smith</b></td>
-                                <td>M</td>
-                                <td><b>11.05.2004</b></td>
-                                <td><span class="status active"></span></td>
-                                <td class="align-middle">
-                                    <button class="btn btn-sm btn-outline-secondary action-btn edit-btn">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-secondary delete-btn">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td><b>PZ-23</b></td>
-                                <td><b>Zbryzkyi Segii</b></td>
-                                <td>M</td>
-                                <td><b>01.01.1001</b></td>
-                                <td><span class="status inactive"></span></td>
-                                <td class="align-middle">
-                                    <button class="btn btn-sm btn-outline-secondary action-btn edit-btn">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-secondary delete-btn">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="table-wrapper position-relative">
+                    <button class="btn btn-outline-primary action-btn add-btn">
+                        <i class="bi bi-plus text-dark"></i>
+                    </button>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <th>Group</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Birthday</th>
+                                    <th>Status</th>
+                                    <th>Options</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td><b>PZ-23</b></td>
+                                    <td><b>John Smith</b></td>
+                                    <td>M</td>
+                                    <td><b>11.05.2004</b></td>
+                                    <td><span class="status active"></span></td>
+                                    <td class="align-middle">
+                                        <button class="btn btn-sm btn-outline-secondary action-btn edit-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary delete-btn">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td><b>PZ-23</b></td>
+                                    <td><b>Zbryzkyi Segii</b></td>
+                                    <td>M</td>
+                                    <td><b>01.01.1001</b></td>
+                                    <td><span class="status inactive"></span></td>
+                                    <td class="align-middle">
+                                        <button class="btn btn-sm btn-outline-secondary action-btn edit-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary delete-btn">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <nav>
