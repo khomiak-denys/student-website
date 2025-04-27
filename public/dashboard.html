@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Website</title>
+    <link rel="icon" href="/icons/icon-192.png" type="image/png">
+    <link rel="manifest" href="/public/manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="students.css">
@@ -14,9 +16,7 @@
             <button class="btn btn-dark d-lg-none me-3" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <a class="navbar-brand" href="#">CMS</a>
-
             <div class="dropdown notification-wrapper ms-auto me-3 position-relative">
                 <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
                     <i class="bi bi-bell bell-icon"></i>
@@ -43,7 +43,6 @@
                     </div>
                 </ul>
             </div>
-
             <div class="profile-wrapper d-flex align-items-center">
                 <div class="dropdown">
                     <a class="nav-link profile-link text-white" href="#" role="button" data-bs-toggle="dropdown">
@@ -57,20 +56,16 @@
             </div>
         </div>
     </nav>
-
     <div class="offcanvas offcanvas-start text-bg-dark" id="sidebarMenu">
         <div class="offcanvas-header">
-
             <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="offcanvas"></button>
         </div>
         <div class="offcanvas-body">
-          
+            
         </div>
     </div>
-
     <div class="container-fluid mt-5 pt-4">
         <div class="row">
-           
             <nav class="col-md-2 d-none d-md-block sidebar p-3">
                 <ul class="nav flex-column sidebar-nav">
                     <li class="nav-item"><a class="nav-link activeBtn" href="dashboard.html">Dashboard</a></li>
@@ -78,13 +73,19 @@
                     <li class="nav-item"><a class="nav-link" href="tasks.html">Tasks</a></li>
                 </ul>
             </nav>
-
             <main class="col-md-10 ms-sm-auto px-md-4">
                 <h2 class="mt-4">Dashboard</h2>
             </main>
         </div>
     </div>
-
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/public/service-worker.js')
+                    .catch(err => console.log('Помилка реєстрації Service Worker:', err));
+            });
+        }
+    </script> 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="student.js"></script>
 </body>

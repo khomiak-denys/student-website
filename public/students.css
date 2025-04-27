@@ -116,16 +116,16 @@ td {
     font-size: 20px;
 }
 
-.action-btn {
+.add-edit-btn {
     border-color: black;
     border-radius: 0%;
     color: black;
 }
-.action-btn:hover{
+.add-edit-btn:hover{
     background-color: grey;
     border-color: transparent;
 }
-.action-btn:active{
+.add-edit-btn:active{
     background-color: darkgrey !important;
     border-color: transparent !important;
 }
@@ -142,7 +142,7 @@ td {
     background-color: darkgrey !important;
     border-color: transparent !important;
 }
-.add-btn {
+.add-edit-btn[data-id="0"] {
     position: absolute;
     top: 0;
     right: 0;

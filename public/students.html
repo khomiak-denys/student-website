@@ -159,7 +159,7 @@
                     </div>
                 </div>
                 <div class="table-wrapper position-relative">
-                    <button class="btn btn-outline-primary action-btn add-btn form-opener" data-action="add">
+                    <button class="btn btn-outline-primary add-edit-btn form-opener" data-id="0">
                         <i class="bi bi-plus-lg"></i>
                     </button>
                     <div class="table-responsive">
@@ -175,7 +175,15 @@
                                     <th>Options</th>
                                 </tr>
                             </thead>
-                            <tr data-id="1">
+                            <tbody>
+                                <tr data-id="1"
+                                data-group-id="3"
+                                data-first-name="Denys"
+                                data-last-name="Khomiak"
+                                data-gender-id="1"
+                                data-birthday="2006-02-17"
+                                data-status="true">
+                                                            
                                 <td><input type="checkbox"></td>
                                 <td><b>PZ-23</b></td>
                                 <td><b>Denys Khomiak</b></td>
@@ -183,14 +191,21 @@
                                 <td><b>17.02.2006</b></td>
                                 <td><span class="status active"></span></td>
                                 <td class="align-middle">
-                                    <button class="btn btn-sm btn-outline-primary action-btn edit-btn">
+                                    <button class="btn btn-sm btn-outline-primary add-edit-btn" data-id="1">
                                         <i class="bi bi-pencil"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-primary delete-btn">
+                                    <button class="btn btn-sm btn-outline-primary delete-btn" data-id="1">
                                         <i class="bi bi-x-lg"></i>
                                     </button>
                                 </td> 
-                                <tr data-id="2">
+                                </tr>
+                                <tr data-id="2"
+                                    data-group-id="3"
+                                    data-first-name="Maria"
+                                    data-last-name="Semionyk"
+                                    data-gender-id="2"
+                                    data-birthday="2006-06-19"
+                                    data-status="true">
                                     <td><input type="checkbox"></td>
                                     <td><b>PZ-23</b></td>
                                     <td><b>Maria Semionyk</b></td>
@@ -198,17 +213,14 @@
                                     <td><b>19.06.2006</b></td>
                                     <td><span class="status active"></span></td>
                                     <td class="align-middle">
-                                        <button class="btn btn-sm btn-outline-primary action-btn edit-btn">
+                                        <button class="btn btn-sm btn-outline-primary add-edit-btn" data-id="2">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-outline-primary delete-btn">
+                                        <button class="btn btn-sm btn-outline-primary delete-btn" data-id="2">
                                             <i class="bi bi-x-lg"></i>
                                         </button>
                                     </td> 
-                                </tr>
-                            </tr>
-                            <tbody>
-                                
+                                </tr> 
                             </tbody>
                         </table>
                     </div>
