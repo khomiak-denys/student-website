@@ -10,64 +10,64 @@ document.addEventListener("DOMContentLoaded", () => {
     if (getUserId) studentIdCounter += +getUserId.dataset.id;  
         
     const addEditButtons = document.querySelectorAll(".add-edit-btn");
-    addEditButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const dataId = this.getAttribute('data-id');
-            if(dataId === '0') {
-                studentForm.dataset.mode = 'add';
-                document.getElementById('studentModalLabel').textContent = 'Add student';
-                document.getElementById('studentId').value = '';
-                document.getElementById('group').value = '';
-                document.getElementById('firstName').value = '';
-                document.getElementById('lastName').value = '';
-                document.getElementById('gender').value = '';
-                document.getElementById('birthday').value = '';
-                document.getElementById('status').checked = false;
-            } else {
-                studentForm.dataset.mode = 'edit';
-                studentForm.dataset.editRowId = dataId;
-                
-                const row = tableBody.querySelector(`tr[data-id="${dataId}"]`);
-                document.getElementById('studentId').value = row.dataset.id || '';
-                document.getElementById('group').value = row.dataset.groupId || '';
-                document.getElementById('firstName').value = row.dataset.firstName || '';
-                document.getElementById('lastName').value = row.dataset.lastName || '';
-                document.getElementById('gender').value = row.dataset.genderId || '';
-                document.getElementById('birthday').value = row.dataset.birthday || '';
-                document.getElementById('status').checked = row.dataset.status === 'true';
-
-                document.getElementById('studentModalLabel').textContent = 'Edit student';
-            }
-            studentModal.show();
-        });
+    addEditButtons.forEach(button => { 
+        button.addEventListener('click', addEditBtnClick);
     });
-
-    const deleteButtons = document.querySelectorAll(".delete-btn");
+    const deleteButtons = tableBody.querySelectorAll(".delete-btn");
     deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const dataId = this.getAttribute('data-id');
+        button.addEventListener('click', deleteBtnClick);
+    })
+
+    function addEditBtnClick(event) {
+        const dataId = this.getAttribute('data-id');
+        
+        if (dataId === '0') {
+            studentForm.dataset.mode = 'add';
+            document.getElementById('studentModalLabel').textContent = 'Add student';
+            document.getElementById('studentId').value = '';
+            document.getElementById('group').value = '';
+            document.getElementById('firstName').value = '';
+            document.getElementById('lastName').value = '';
+            document.getElementById('gender').value = '';
+            document.getElementById('birthday').value = '';
+            document.getElementById('status').checked = false;
+        } else {
+            studentForm.dataset.mode = 'edit';
+            studentForm.dataset.editRowId = dataId;
+    
+            const row = tableBody.querySelector(`tr[data-id="${dataId}"]`);
+            document.getElementById('studentId').value = row.dataset.id || '';
+            document.getElementById('group').value = row.dataset.groupId || '';
+            document.getElementById('firstName').value = row.dataset.firstName || '';
+            document.getElementById('lastName').value = row.dataset.lastName || '';
+            document.getElementById('gender').value = row.dataset.genderId || '';
+            document.getElementById('birthday').value = row.dataset.birthday || '';
+            document.getElementById('status').checked = row.dataset.status === 'true';
+    
+            document.getElementById('studentModalLabel').textContent = 'Edit student';
+        }
+        studentModal.show();
+    }
+    
+    function deleteBtnClick(event){
+        const dataId = this.getAttribute('data-id');
             const currentRow = tableBody.querySelector(`tr[data-id="${dataId}"]`);
-            
             const selectedRows = getSelectedRows();
 
             if (!deleteConfirmModal.dataset) {
                 deleteConfirmModal.dataset = {};
             }
-            
             if (selectedRows.length > 0) {
                 const names = selectedRows.map(row => row.cells[2].textContent).join(', ');
                 document.querySelector('#deleteConfirmModal .student-name').textContent = names;
                 deleteConfirmModal.dataset.multiDelete = 'true';
             } else {
-                const studentName = currentRow.cells[2].textContent;
-                document.querySelector('#deleteConfirmModal .student-name').textContent = studentName;
+                document.querySelector('#deleteConfirmModal .student-name').textContent = currentRow.dataset.firstName + " " + currentRow.dataset.lastName;
                 deleteConfirmModal.dataset.multiDelete = 'false';
                 deleteConfirmModal.dataset.rowId = currentRow.dataset.id || '';
             }
             deleteConfirmModal.show();
-
-        });
-    });
+    }
 
     selectAllCheckbox.addEventListener('change', () => {
         Array.from(tableBody.querySelectorAll('input[type="checkbox"]')).map(checkbox => {
@@ -116,26 +116,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
         deleteConfirmModal.hide();
+        
         studentIdCounter = 0;
-
         const getUserId = document.querySelector("table#list-students tbody tr:last-child"); 
         if (getUserId) studentIdCounter += +getUserId.dataset.id;  
-    });
-
-    document.getElementById('studentModal').addEventListener('hidden.bs.modal', () => {
-        const lastFocusedId = studentForm.dataset.lastFocused;
-        if (lastFocusedId) {
-            const element = document.getElementById(lastFocusedId);
-            if (element) element.focus();
-        }
-    });
-
-    document.getElementById('deleteConfirmModal').addEventListener('hidden.bs.modal', () => {
-        const lastFocusedId = deleteConfirmModal.dataset.lastFocused;
-        if (lastFocusedId) {
-            const element = document.getElementById(lastFocusedId);
-            if (element) element.focus();
-        }
     });
 
     function getSelectedRows() {
@@ -143,7 +127,6 @@ document.addEventListener("DOMContentLoaded", () => {
             row.querySelector('input[type="checkbox"]').checked
         );
     }
-
 
     function addNewRow(data) {
         const newRow = document.createElement('tr');
@@ -176,33 +159,8 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         tableBody.appendChild(newRow);
 
-        const addEditButtons = document.querySelectorAll(".add-edit-btn");
-        addEditButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const dataId = this.getAttribute('data-id');
-                if(dataId === '0') {
-                    studentForm.dataset.mode = 'add';
-                    document.getElementById('studentModalLabel').textContent = 'Add student';
-                    document.getElementById('studentId').value = '';
-                    document.getElementById('group').value = '';
-                    document.getElementById('firstName').value = '';
-                    document.getElementById('lastName').value = '';
-                    document.getElementById('gender').value = '';
-                    document.getElementById('birthday').value = '';
-                    document.getElementById('status').checked = false;
-                } else {
-                    studentForm.dataset.mode = 'edit';
-                    studentForm.dataset.editRowId = dataId;
-                    
-                    const currentRow = tableBody.querySelector(`tr[data-id="${dataId}"]`);
-                    console.log(currentRow.dataset.firstName);
-                    fillFormFromRow(currentRow);
-                    document.getElementById('studentModalLabel').textContent = 'Edit student';
-                }
-                studentModal.show();
-            });
-        });
-        
+        newRow.querySelector('.add-edit-btn').addEventListener('click', addEditBtnClick);
+        newRow.querySelector('.delete-btn').addEventListener('click', deleteBtnClick);
     }
     
     function updateRowSelective(row, newData) {
