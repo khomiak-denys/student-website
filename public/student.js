@@ -6,21 +6,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectAllCheckbox = document.getElementById('selectAll');
 
     let studentIdCounter = 0;
-    const getUserId = document.querySelector("table#list-students tbody tr:last-child"); 
-    if (getUserId) studentIdCounter += +getUserId.dataset.id;  
-        
+    const getUserId = document.querySelector("table#list-students tbody tr:last-child");
+    if (getUserId) studentIdCounter += +getUserId.dataset.id;
+
     const addEditButtons = document.querySelectorAll(".add-edit-btn");
-    addEditButtons.forEach(button => { 
+    addEditButtons.forEach(button => {
         button.addEventListener('click', addEditBtnClick);
     });
     const deleteButtons = tableBody.querySelectorAll(".delete-btn");
     deleteButtons.forEach(button => {
         button.addEventListener('click', deleteBtnClick);
-    })
+    });
 
     function addEditBtnClick(event) {
         const dataId = this.getAttribute('data-id');
-        
+
         if (dataId === '0') {
             studentForm.dataset.mode = 'add';
             document.getElementById('studentModalLabel').textContent = 'Add student';
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             studentForm.dataset.mode = 'edit';
             studentForm.dataset.editRowId = dataId;
-    
+
             const row = tableBody.querySelector(`tr[data-id="${dataId}"]`);
             document.getElementById('studentId').value = row.dataset.id || '';
             document.getElementById('group').value = row.dataset.groupId || '';
@@ -43,30 +43,30 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('gender').value = row.dataset.genderId || '';
             document.getElementById('birthday').value = row.dataset.birthday || '';
             document.getElementById('status').checked = row.dataset.status === 'true';
-    
+
             document.getElementById('studentModalLabel').textContent = 'Edit student';
         }
         studentModal.show();
     }
-    
-    function deleteBtnClick(event){
-        const dataId = this.getAttribute('data-id');
-            const currentRow = tableBody.querySelector(`tr[data-id="${dataId}"]`);
-            const selectedRows = getSelectedRows();
 
-            if (!deleteConfirmModal.dataset) {
-                deleteConfirmModal.dataset = {};
-            }
-            if (selectedRows.length > 0) {
-                const names = selectedRows.map(row => row.cells[2].textContent).join(', ');
-                document.querySelector('#deleteConfirmModal .student-name').textContent = names;
-                deleteConfirmModal.dataset.multiDelete = 'true';
-            } else {
-                document.querySelector('#deleteConfirmModal .student-name').textContent = currentRow.dataset.firstName + " " + currentRow.dataset.lastName;
-                deleteConfirmModal.dataset.multiDelete = 'false';
-                deleteConfirmModal.dataset.rowId = currentRow.dataset.id || '';
-            }
-            deleteConfirmModal.show();
+    function deleteBtnClick(event) {
+        const dataId = this.getAttribute('data-id');
+        const currentRow = tableBody.querySelector(`tr[data-id="${dataId}"]`);
+        const selectedRows = getSelectedRows();
+
+        if (!deleteConfirmModal.dataset) {
+            deleteConfirmModal.dataset = {};
+        }
+        if (selectedRows.length > 0) {
+            const names = selectedRows.map(row => row.cells[2].textContent).join(', ');
+            document.querySelector('#deleteConfirmModal .student-name').textContent = names;
+            deleteConfirmModal.dataset.multiDelete = 'true';
+        } else {
+            document.querySelector('#deleteConfirmModal .student-name').textContent = currentRow.dataset.firstName + " " + currentRow.dataset.lastName;
+            deleteConfirmModal.dataset.multiDelete = 'false';
+            deleteConfirmModal.dataset.rowId = currentRow.dataset.id || '';
+        }
+        deleteConfirmModal.show();
     }
 
     selectAllCheckbox.addEventListener('change', () => {
@@ -88,8 +88,18 @@ document.addEventListener("DOMContentLoaded", () => {
             status: document.getElementById('status').checked
         };
 
-        const serverData = JSON.stringify(studentData);
-        console.log(serverData);
+        fetch('api.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(studentData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(`Помилка: ${data.error}`);
+            } else {
                 if (formMode === 'edit') {
                     const rowToUpdate = tableBody.querySelector(`tr[data-id="${studentForm.dataset.editRowId}"]`);
                     if (rowToUpdate) {
@@ -100,30 +110,74 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 studentModal.hide();
                 saveToCache(studentData);
+            }
+        })
+        .catch(error => {
+            alert(`Помилка відправки даних: ${error.message}`);
+        });
     });
 
     document.getElementById('confirmDelete').addEventListener('click', () => {
         if (deleteConfirmModal.dataset.multiDelete === 'true') {
-            getSelectedRows().map(row => row.remove());
-            selectAllCheckbox.checked = false;
+            const selectedRows = getSelectedRows();
+            const ids = selectedRows.map(row => row.dataset.id);
+            fetch('api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: 'delete', ids })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(`Помилка: ${data.error}`);
+                } else {
+                    selectedRows.forEach(row => row.remove());
+                    selectAllCheckbox.checked = false;
+                    deleteConfirmModal.hide();
+                    studentIdCounter = 0;
+                    const getUserId = document.querySelector("table#list-students tbody tr:last-child");
+                    if (getUserId) studentIdCounter += +getUserId.dataset.id;
+                }
+            })
+            .catch(error => {
+                alert(`Помилка видалення: ${error.message}`);
+            });
         } else {
             const rowId = deleteConfirmModal.dataset.rowId;
             if (rowId) {
-                const rowToDelete = document.querySelector(`tr[data-id="${rowId}"]`);
-                if (rowToDelete) {
-                    rowToDelete.remove();
-                }
+                fetch('api.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'delete', ids: [rowId] })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(`Помилка: ${data.error}`);
+                    } else {
+                        const rowToDelete = document.querySelector(`tr[data-id="${rowId}"]`);
+                        if (rowToDelete) {
+                            rowToDelete.remove();
+                        }
+                        deleteConfirmModal.hide();
+                        studentIdCounter = 0;
+                        const getUserId = document.querySelector("table#list-students tbody tr:last-child");
+                        if (getUserId) studentIdCounter += +getUserId.dataset.id;
+                    }
+                })
+                .catch(error => {
+                    alert(`Помилка видалення: ${error.message}`);
+                });
             }
         }
-        deleteConfirmModal.hide();
-        
-        studentIdCounter = 0;
-        const getUserId = document.querySelector("table#list-students tbody tr:last-child"); 
-        if (getUserId) studentIdCounter += +getUserId.dataset.id;  
     });
 
     function getSelectedRows() {
-        return Array.from(tableBody.querySelectorAll('tr')).filter(row => 
+        return Array.from(tableBody.querySelectorAll('tr')).filter(row =>
             row.querySelector('input[type="checkbox"]').checked
         );
     }
@@ -137,10 +191,10 @@ document.addEventListener("DOMContentLoaded", () => {
         newRow.dataset.status = data.status;
         newRow.dataset.firstName = data.firstName;
         newRow.dataset.lastName = data.lastName;
-    
+
         const genderShort = data.genderId === '1' ? 'M' : 'F';
         const groupText = document.querySelector(`#group option[value="${data.groupId}"]`).textContent;
-    
+
         newRow.innerHTML = `
             <td><input type="checkbox"></td>
             <td><b>${groupText}</b></td>
@@ -162,16 +216,16 @@ document.addEventListener("DOMContentLoaded", () => {
         newRow.querySelector('.add-edit-btn').addEventListener('click', addEditBtnClick);
         newRow.querySelector('.delete-btn').addEventListener('click', deleteBtnClick);
     }
-    
+
     function updateRowSelective(row, newData) {
         row.dataset.id = newData.id;
         row.dataset.groupId = newData.groupId;
         row.dataset.genderId = newData.genderId;
         row.dataset.birthday = newData.birthday;
         row.dataset.status = newData.status;
-        row.dataset.firstName = newData.firstName; 
-        row.dataset.lastName = newData.lastName;   
-            
+        row.dataset.firstName = newData.firstName;
+        row.dataset.lastName = newData.lastName;
+
         row.cells[1].innerHTML = `<b>${document.querySelector(`#group option[value="${newData.groupId}"]`).textContent}</b>`;
         row.cells[2].innerHTML = `<b>${newData.firstName} ${newData.lastName}</b>`;
         row.cells[3].textContent = newData.genderId === '1' ? 'M' : 'F';
@@ -223,4 +277,4 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("load", moveElements);
     window.addEventListener("resize", moveElements);
     moveElements();
-}); 
+});
