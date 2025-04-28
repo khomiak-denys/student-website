@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="students.css">
+    <?php include 'arrays.php'; ?>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -90,9 +91,9 @@
                                         <div class="col-sm-8">
                                             <select class="form-select" id="group" required>
                                                 <option value="">Select group</option>
-                                                <option value="3">PZ-23</option>
-                                                <option value="4">PZ-24</option>
-                                                <option value="5">PZ-25</option>
+                                                <?php foreach ($groups as $group): ?>
+                                                    <option value="<?php echo $group['id']; ?>"><?php echo $group['name']; ?></option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
@@ -113,8 +114,9 @@
                                         <div class="col-sm-8">
                                             <select class="form-select" id="gender" required>
                                                 <option value="">Select Gender</option>
-                                                <option value="1">Male</option>
-                                                <option value="2">Female</option>
+                                                <?php foreach ($genders as $gender): ?>
+                                                    <option value="<?php echo $gender['id']; ?>"><?php echo $gender['name']; ?></option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
