@@ -1,7 +1,7 @@
 {
     "name": "Student Management System",
     "short_name": "Student CMS",
-    "start_url": "/students.html",
+    "start_url": "/public/students.html",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#000000",
@@ -17,5 +17,5 @@
             "type": "image/png"
         }
     ],
-    "scope": "/"
+    "scope": "/public/"
 }

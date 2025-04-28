@@ -1,15 +1,14 @@
 const CACHE_NAME = 'student-data-v1';
 const urlsToCache = [
-    '/',
-    '/students.html',
-    '/students.css',
-    '/student.js',
+    '/public/',
+    '/public/students.html',
+    '/public/students.css',
+    '/public/student.js',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
     'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'
 ];
 
-// Установка Service Worker і кешування ресурсів
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
@@ -20,7 +19,6 @@ self.addEventListener('install', event => {
     );
 });
 
-// Оновлення кешу при зміні Service Worker
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
@@ -32,15 +30,14 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Обробка запитів із кешу або мережі
 self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request)
             .then(response => {
                 if (response) {
-                    return response; // Повертаємо з кешу
+                    return response;
                 }
-                return fetch(event.request) // Інакше завантажуємо з мережі
+                return fetch(event.request)
                     .then(response => {
                         if (!response || response.status !== 200 || response.type !== 'basic') {
                             return response;

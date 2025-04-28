@@ -82,15 +82,14 @@
     height: 15px;
     border-radius: 50%;
     display: inline-block;
+    background-color: lightgray;
 }
 
-.active {
+.status.active {
     background-color: green;
 }
 
-.inactive {
-    background-color: lightgray;
-}
+
 
 td {
     text-align: center;
@@ -117,30 +116,38 @@ td {
     font-size: 20px;
 }
 
-.action-btn {
-    border: none;
-}
-
-.add-btn {
+.add-edit-btn {
     border-color: black;
+    border-radius: 0%;
+    color: black;
+}
+.add-edit-btn:hover{
+    background-color: grey;
+    border-color: transparent;
+}
+.add-edit-btn:active{
+    background-color: darkgrey !important;
+    border-color: transparent !important;
+}
+.delete-btn{
+    border-color: black;
+    border-radius: 0%;
+    color: black;
+}
+.delete-btn:hover{
+    background-color: grey;
+    border-color: transparent;
+}
+.delete-btn:active{
+    background-color: darkgrey !important;
+    border-color: transparent !important;
+}
+.add-edit-btn[data-id="0"] {
     position: absolute;
     top: 0;
     right: 0;
     transform: translateY(-120%); 
 }
-
-.add-btn:hover {
-    background-color: grey;
-}
-
-.add-btn:active {
-    background-color: grey !important;
-}
-
-.btn-outline-secondary {
-    border: none;
-}
-
 .pagination .page-link {
     color: black;
 }
@@ -158,7 +165,11 @@ td {
 
 .table-wrapper {
     position: relative;
-    margin-top: 40px; /* Невеликий відступ між заголовком і таблицею з кнопкою */
+    margin-top: 40px; 
+}
+.table td, .table th {
+    text-align: center;
+    vertical-align: middle;
 }
 
 @media (max-width: 991px) {

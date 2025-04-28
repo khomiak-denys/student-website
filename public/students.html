@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Website</title>
-    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icons/icon-192.png" type="image/png">
+    <link rel="manifest" href="/public/manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="students.css">
@@ -88,6 +89,7 @@
                                         <label for="group" class="col-sm-4 col-form-label">Group</label>
                                         <div class="col-sm-8">
                                             <select class="form-select" id="group" required>
+                                                <option value="">Select group</option>
                                                 <option value="3">PZ-23</option>
                                                 <option value="4">PZ-24</option>
                                                 <option value="5">PZ-25</option>
@@ -110,6 +112,7 @@
                                         <label for="gender" class="col-sm-4 col-form-label">Gender</label>
                                         <div class="col-sm-8">
                                             <select class="form-select" id="gender" required>
+                                                <option value="">Select Gender</option>
                                                 <option value="1">Male</option>
                                                 <option value="2">Female</option>
                                             </select>
@@ -156,11 +159,11 @@
                     </div>
                 </div>
                 <div class="table-wrapper position-relative">
-                    <button class="btn btn-outline-primary action-btn add-btn">
-                        <i class="bi bi-plus text-dark"></i>
+                    <button class="btn btn-outline-primary add-edit-btn form-opener" data-id="0">
+                        <i class="bi bi-plus-lg"></i>
                     </button>
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" id="list-students">
                             <thead class="table-dark">
                                 <tr>
                                     <td><input type="checkbox" id="selectAll"></td>
@@ -172,7 +175,15 @@
                                     <th>Options</th>
                                 </tr>
                             </thead>
-                            <tr>
+                            <tbody>
+                                <tr data-id="1"
+                                data-group-id="3"
+                                data-first-name="Denys"
+                                data-last-name="Khomiak"
+                                data-gender-id="1"
+                                data-birthday="2006-02-17"
+                                data-status="true">
+                                                            
                                 <td><input type="checkbox"></td>
                                 <td><b>PZ-23</b></td>
                                 <td><b>Denys Khomiak</b></td>
@@ -180,14 +191,21 @@
                                 <td><b>17.02.2006</b></td>
                                 <td><span class="status active"></span></td>
                                 <td class="align-middle">
-                                    <button class="btn btn-sm btn-outline-secondary action-btn edit-btn">
+                                    <button class="btn btn-sm btn-outline-primary add-edit-btn" data-id="1">
                                         <i class="bi bi-pencil"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-secondary delete-btn">
+                                    <button class="btn btn-sm btn-outline-primary delete-btn" data-id="1">
                                         <i class="bi bi-x-lg"></i>
                                     </button>
                                 </td> 
-                                <tr>
+                                </tr>
+                                <tr data-id="2"
+                                    data-group-id="3"
+                                    data-first-name="Maria"
+                                    data-last-name="Semionyk"
+                                    data-gender-id="2"
+                                    data-birthday="2006-06-19"
+                                    data-status="true">
                                     <td><input type="checkbox"></td>
                                     <td><b>PZ-23</b></td>
                                     <td><b>Maria Semionyk</b></td>
@@ -195,17 +213,14 @@
                                     <td><b>19.06.2006</b></td>
                                     <td><span class="status active"></span></td>
                                     <td class="align-middle">
-                                        <button class="btn btn-sm btn-outline-secondary action-btn edit-btn">
+                                        <button class="btn btn-sm btn-outline-primary add-edit-btn" data-id="2">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-outline-secondary delete-btn">
+                                        <button class="btn btn-sm btn-outline-primary delete-btn" data-id="2">
                                             <i class="bi bi-x-lg"></i>
                                         </button>
                                     </td> 
-                                </tr>
-                            </tr>
-                            <tbody>
-                                
+                                </tr> 
                             </tbody>
                         </table>
                     </div>
@@ -227,8 +242,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(reg => console.log('Service Worker зареєстровано', reg))
+                navigator.serviceWorker.register('/public/service-worker.js')
                     .catch(err => console.log('Помилка реєстрації Service Worker:', err));
             });
         }
