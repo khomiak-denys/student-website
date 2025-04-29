@@ -189,7 +189,7 @@
                                 <td><input type="checkbox"></td>
                                 <td><b>PZ-23</b></td>
                                 <td><b>Denys Khomiak</b></td>
-                                <td>M</td>
+                                <td><b>M</b></td>
                                 <td><b>17.02.2006</b></td>
                                 <td><span class="status active"></span></td>
                                 <td class="align-middle">
@@ -211,7 +211,7 @@
                                     <td><input type="checkbox"></td>
                                     <td><b>PZ-23</b></td>
                                     <td><b>Maria Semionyk</b></td>
-                                    <td>F</td>
+                                    <td><b>F</b></td>
                                     <td><b>19.06.2006</b></td>
                                     <td><span class="status active"></span></td>
                                     <td class="align-middle">

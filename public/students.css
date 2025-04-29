@@ -89,10 +89,12 @@
     background-color: green;
 }
 
-
-
 td {
     text-align: center;
+}
+
+.error-field {
+    border: 2px solid red !important; 
 }
 
 .notification-dot {
