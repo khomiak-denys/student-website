@@ -1,59 +1,69 @@
 <?php
 header('Content-Type: application/json');
 
-// Отримуємо дані з $_POST
 $data = $_POST;
 
-// Перевірка, чи це запит на видалення
+error_log('Отримано дані: ' . print_r($data, true));
+
+
 if (isset($data['action']) && $data['action'] === 'delete') {
     if (empty($data['ids']) || !is_array($data['ids'])) {
         echo json_encode(['error' => 'Не вказано ID для видалення']);
         exit;
     }
 
-    // Логіка видалення (тут можна додати взаємодію з базою даних)
-    // Для прикладу просто повертаємо успіх
     echo json_encode(['success' => true]);
     exit;
 }
 
-// Перевірка обов'язкових полів для додавання/редагування
+if (!isset($data['data']) || empty($data['data'])) {
+    echo json_encode(['error' => 'Дані не надіслано']);
+    exit;
+}
+
+$studentData = json_decode($data['data'], true);
+if (json_last_error() !== JSON_ERROR_NONE) {
+    echo json_encode(['error' => 'Некоректний формат JSON']);
+    exit;
+}
+
 $required_fields = ['id', 'groupId', 'firstName', 'lastName', 'genderId', 'birthday', 'status'];
 foreach ($required_fields as $field) {
-    if (!isset($data[$field])) {
+    if (!isset($studentData[$field]) || $studentData[$field] === '') {
         echo json_encode(['error' => "Поле $field є обов'язковим"]);
         exit;
     }
 }
 
-// Перевірка коректності даних
-if (!is_numeric($data['groupId']) || $data['groupId'] <= 0) {
+if (!is_numeric($studentData['id']) || $studentData['id'] <= 0) {
+    echo json_encode(['error' => 'Некоректний ID студента']);
+    exit;
+}
+if (!is_numeric($studentData['groupId']) || $studentData['groupId'] <= 0) {
     echo json_encode(['error' => 'Некоректний ID групи']);
     exit;
 }
-if (empty($data['firstName']) || !preg_match('/^[a-zA-Zа-яА-ЯёЁ\s-]+$/u', $data['firstName'])) {
+if (empty($studentData['firstName']) || !preg_match('/^[a-zA-Zа-яА-ЯёЁ\s-]+$/u', $studentData['firstName'])) {
     echo json_encode(['error' => 'Некоректне ім\'я']);
     exit;
 }
-if (empty($data['lastName']) || !preg_match('/^[a-zA-Zа-яА-ЯёЁ\s-]+$/u', $data['lastName'])) {
+if (empty($studentData['lastName']) || !preg_match('/^[a-zA-Zа-яА-ЯёЁ\s-]+$/u', $studentData['lastName'])) {
     echo json_encode(['error' => 'Некоректне прізвище']);
     exit;
 }
-if (!in_array($data['genderId'], ['1', '2'])) {
+if (!in_array($studentData['genderId'], ['1', '2'])) {
     echo json_encode(['error' => 'Некоректна стать']);
     exit;
 }
-if (!DateTime::createFromFormat('Y-m-d', $data['birthday'])) {
+if (!DateTime::createFromFormat('Y-m-d', $studentData['birthday'])) {
     echo json_encode(['error' => 'Некоректна дата народження']);
     exit;
 }
-if (!is_bool($data['status']) && !in_array($data['status'], ['true', 'false', 0, 1])) {
+if ($studentData['status'] !== true && $studentData['status'] !== false) {
     echo json_encode(['error' => 'Некоректний статус']);
     exit;
 }
 
-// Логіка збереження/редагування (тут можна додати взаємодію з базою даних)
-// Для прикладу просто повертаємо успіх із даними
-echo json_encode(['success' => true, 'data' => $data]);
+echo json_encode(['success' => true, 'data' => $studentData]);
 exit;
 ?>

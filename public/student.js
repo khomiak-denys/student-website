@@ -36,6 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
             studentForm.dataset.editRowId = dataId;
 
             const row = tableBody.querySelector(`tr[data-id="${dataId}"]`);
+            if (!row.dataset.id) {
+                console.error('ID рядка не знайдено');
+                return;
+            }
             document.getElementById('studentId').value = row.dataset.id || '';
             document.getElementById('group').value = row.dataset.groupId || '';
             document.getElementById('firstName').value = row.dataset.firstName || '';
@@ -79,24 +83,37 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('saveStudent').addEventListener('click', () => {
         const formMode = studentForm.dataset.mode;
         const studentData = {
-            id: formMode === 'add' ? String(studentIdCounter === 0 ? 1 : ++studentIdCounter) : document.getElementById('studentId').value,
+            id: formMode === 'edit' ? document.getElementById('studentId').value : String(++studentIdCounter),
             groupId: document.getElementById('group').value,
             firstName: document.getElementById('firstName').value,
             lastName: document.getElementById('lastName').value,
             genderId: document.getElementById('gender').value,
             birthday: document.getElementById('birthday').value,
-            status: document.getElementById('status').checked
+            status: document.getElementById('status').checked 
         };
+
+        if (formMode === 'edit') {
+            studentData.id = document.getElementById('studentId').value;
+        } else {
+            studentData.id = String(++studentIdCounter); 
+        }
+
+
+        const formData = new URLSearchParams();
+        formData.append('data', JSON.stringify(studentData));
+
+        console.log('Надсилаємо дані:', Object.fromEntries(formData));
 
         fetch('api.php', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: JSON.stringify(studentData)
+            body: formData
         })
         .then(response => response.json())
         .then(data => {
+            console.log('Відповідь сервера:', data); 
             if (data.error) {
                 alert(`Помилка: ${data.error}`);
             } else {
@@ -120,16 +137,28 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('confirmDelete').addEventListener('click', () => {
         if (deleteConfirmModal.dataset.multiDelete === 'true') {
             const selectedRows = getSelectedRows();
-            const ids = selectedRows.map(row => row.dataset.id);
+            const ids = selectedRows.map(row => row.dataset.id).filter(id => id);
+            if (ids.length === 0) {
+                alert('Помилка: Не вибрано жодного студента');
+                return;
+            }
+
+            const formData = new URLSearchParams();
+            formData.append('action', 'delete');
+            ids.forEach(id => formData.append('ids[]', id));
+
+            console.log('Надсилаємо для видалення:', Object.fromEntries(formData)); 
+
             fetch('api.php', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: JSON.stringify({ action: 'delete', ids })
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
+                console.log('Відповідь сервера:', data); 
                 if (data.error) {
                     alert(`Помилка: ${data.error}`);
                 } else {
@@ -146,33 +175,47 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         } else {
             const rowId = deleteConfirmModal.dataset.rowId;
-            if (rowId) {
-                fetch('api.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ action: 'delete', ids: [rowId] })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        alert(`Помилка: ${data.error}`);
-                    } else {
-                        const rowToDelete = document.querySelector(`tr[data-id="${rowId}"]`);
-                        if (rowToDelete) {
-                            rowToDelete.remove();
-                        }
-                        deleteConfirmModal.hide();
-                        studentIdCounter = 0;
-                        const getUserId = document.querySelector("table#list-students tbody tr:last-child");
-                        if (getUserId) studentIdCounter += +getUserId.dataset.id;
-                    }
-                })
-                .catch(error => {
-                    alert(`Помилка видалення: ${error.message}`);
-                });
+            if (!rowId) {
+                alert('Помилка: ID студента не визначено');
+                return;
             }
+
+            const formData = new URLSearchParams();
+            formData.append('action', 'delete');
+            formData.append('ids[]', rowId);
+
+            console.log('Надсилаємо для видалення:', Object.fromEntries(formData)); 
+
+            fetch('api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Відповідь сервера:', data); 
+                if (data.error) {
+                    alert(`Помилка: ${data.error}`);
+                } else {
+                    const rowToDelete = document.querySelector(`tr[data-id="${rowId}"]`);
+                    if (rowToDelete) {
+                        rowToDelete.remove();
+                    }
+                    deleteConfirmModal.hide();
+                    studentIdCounter = 0;
+                    const getUserId = document.querySelector("table#list-students tbody tr:last-child");
+                    if (getUserId && getUserId.dataset.id) {
+                        studentIdCounter = parseInt(getUserId.dataset.id, 10);
+                    } else {
+                        studentIdCounter = 1;
+                    }
+                }
+            })
+            .catch(error => {
+                alert(`Помилка видалення: ${error.message}`);
+            });
         }
     });
 
@@ -188,20 +231,26 @@ document.addEventListener("DOMContentLoaded", () => {
         newRow.dataset.groupId = data.groupId;
         newRow.dataset.genderId = data.genderId;
         newRow.dataset.birthday = data.birthday;
-        newRow.dataset.status = data.status;
+        newRow.dataset.status = String(data.status); 
         newRow.dataset.firstName = data.firstName;
         newRow.dataset.lastName = data.lastName;
 
         const genderShort = data.genderId === '1' ? 'M' : 'F';
-        const groupText = document.querySelector(`#group option[value="${data.groupId}"]`).textContent;
+        const groupText = document.querySelector(`#group option[value="${data.groupId}"]`)?.textContent || '';
+        const formattedDate = data.birthday ? 
+            new Date(data.birthday).toLocaleDateString('uk-UA', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            }).replace(/\//g, '.') : '';
 
         newRow.innerHTML = `
             <td><input type="checkbox"></td>
             <td><b>${groupText}</b></td>
             <td><b>${data.firstName} ${data.lastName}</b></td>
             <td>${genderShort}</td>
-            <td><b>${data.birthday ? data.birthday.slice(8,10)+'.'+data.birthday.slice(5,7)+'.'+data.birthday.slice(0,4) : ''}</b></td>
-            <td><span class="status ${data.status ? 'active' : ''}"></span></td>
+            <td><b>${formattedDate}</b></td>
+            <td><span class="status ${data.status === true ? 'active' : ''}"></span></td>
             <td class="align-middle">
                 <button class="btn btn-sm btn-outline-primary add-edit-btn" data-id="${data.id}">
                     <i class="bi bi-pencil"></i>
@@ -222,15 +271,22 @@ document.addEventListener("DOMContentLoaded", () => {
         row.dataset.groupId = newData.groupId;
         row.dataset.genderId = newData.genderId;
         row.dataset.birthday = newData.birthday;
-        row.dataset.status = newData.status;
+        row.dataset.status = String(newData.status); 
         row.dataset.firstName = newData.firstName;
         row.dataset.lastName = newData.lastName;
 
-        row.cells[1].innerHTML = `<b>${document.querySelector(`#group option[value="${newData.groupId}"]`).textContent}</b>`;
+        const formattedDate = newData.birthday ? 
+            new Date(newData.birthday).toLocaleDateString('uk-UA', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            }).replace(/\//g, '.') : '';
+
+        row.cells[1].innerHTML = `<b>${document.querySelector(`#group option[value="${newData.groupId}"]`)?.textContent || ''}</b>`;
         row.cells[2].innerHTML = `<b>${newData.firstName} ${newData.lastName}</b>`;
         row.cells[3].textContent = newData.genderId === '1' ? 'M' : 'F';
-        row.cells[4].innerHTML = `<b>${newData.birthday ? newData.birthday.slice(8,10)+'.'+newData.birthday.slice(5,7)+'.'+newData.birthday.slice(0,4) : ''}</b>`;
-        row.cells[5].innerHTML = `<span class="status ${newData.status ? 'active' : ''}"></span>`;
+        row.cells[4].innerHTML = `<b>${formattedDate}</b>`;
+        row.cells[5].innerHTML = `<span class="status ${newData.status === true ? 'active' : ''}"></span>`;
     }
 
     function saveToCache(data) {
@@ -238,6 +294,8 @@ document.addEventListener("DOMContentLoaded", () => {
             caches.open('student-data-v1').then(cache => {
                 const response = new Response(JSON.stringify(data));
                 cache.put(`/student-data/${data.id}`, response);
+            }).catch(error => {
+                console.error('Помилка кешування:', error);
             });
         }
     }

@@ -26,7 +26,7 @@
                 <ul class="dropdown-menu notification-dropdown dropdown-menu-end">
                     <div class="notification-item unread">
                         <div class="profile-icon-container">
-                            <img src="profile-icon.svg" alt="User Icon" class="profile-icon">
+                            <img src="/icons/profile-icon.svg" alt="User Icon" class="profile-icon">
                             <p class="username"><em>John D.</em></p>
                         </div>
                         <div class="notification-content">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="notification-item unread">
                         <div class="profile-icon-container">
-                            <img src="profile-icon.svg" alt="User Icon" class="profile-icon">
+                            <img src="/icons/profile-icon.svg" alt="User Icon" class="profile-icon">
                             <p class="username"><em>Vitalii K.</em></p>
                         </div>
                         <div class="notification-content">
@@ -47,7 +47,7 @@
             <div class="profile-wrapper d-flex align-items-center">
                 <div class="dropdown">
                     <a class="nav-link profile-link text-white" href="#" role="button" data-bs-toggle="dropdown">
-                        <img src="profile-icon.svg" alt="Профіль" class="rounded-circle me-2" width="30"> Johny Sins
+                        <img src="/icons/profile-icon.svg" alt="Профіль" class="rounded-circle me-2" width="30"> Johny Sins
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
