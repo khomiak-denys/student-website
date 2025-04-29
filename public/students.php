@@ -70,7 +70,7 @@
             <nav class="col-md-2 d-none d-md-block sidebar p-3">
                 <ul class="nav flex-column sidebar-nav">
                     <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link activeBtn" href="students.html">Students</a></li>
+                    <li class="nav-item"><a class="nav-link activeBtn" href="students.php">Students</a></li>
                     <li class="nav-item"><a class="nav-link" href="tasks.html">Tasks</a></li>
                 </ul>
             </nav>
@@ -83,7 +83,7 @@
                                 <h5 class="modal-title" id="studentModalLabel">Add/Edit student</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body">    
                                 <form id="studentForm">
                                     <input type="hidden" id="studentId">
                                     <div class="mb-3 row">
@@ -245,7 +245,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/public/service-worker.js')
-                    .catch(err => console.log('Помилка реєстрації Service Worker:', err));
+                    .catch(err => console.log('Service Worker registration error: ', err));
             });
         }
     </script> 

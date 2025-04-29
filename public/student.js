@@ -88,6 +88,11 @@ document.addEventListener("DOMContentLoaded", () => {
             birthday: document.getElementById('birthday').value,
             status: document.getElementById('status').checked 
         };
+        if (formMode === 'edit') {
+            studentData.id = document.getElementById('studentId').value;
+        } else {
+            studentData.id = String(++studentIdCounter); 
+        }
 
         const formData = new URLSearchParams();
         formData.append('data', JSON.stringify(studentData));
@@ -196,6 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const genderText = document.querySelector(`#gender option[value="${data.genderId}"]`)?.textContent || '';
         const genderDisplay = genderText === 'Male' ? 'M' : genderText === 'Female' ? 'F' : genderText;
         const formattedDate = data.birthday ?
+
             new Date(data.birthday).toLocaleDateString('uk-UA', {
                 day: '2-digit',
                 month: '2-digit',
@@ -257,6 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 cache.put(`/student-data/${data.id}`, response);
             }).catch(error => {
                 console.error('Cache error:', error);
+
             });
         }
     }
