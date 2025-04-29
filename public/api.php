@@ -1,11 +1,10 @@
 <?php
 header('Content-Type: application/json');
 
+
 $data = $_POST;
 
 error_log('Отримано дані: ' . print_r($data, true));
-
-
 if (isset($data['action']) && $data['action'] === 'delete') {
     if (empty($data['ids']) || !is_array($data['ids'])) {
         echo json_encode(['error' => 'Не вказано ID для видалення']);
@@ -15,6 +14,7 @@ if (isset($data['action']) && $data['action'] === 'delete') {
     echo json_encode(['success' => true]);
     exit;
 }
+
 
 if (!isset($data['data']) || empty($data['data'])) {
     echo json_encode(['error' => 'Дані не надіслано']);
@@ -30,10 +30,12 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 $required_fields = ['id', 'groupId', 'firstName', 'lastName', 'genderId', 'birthday', 'status'];
 foreach ($required_fields as $field) {
     if (!isset($studentData[$field]) || $studentData[$field] === '') {
+
         echo json_encode(['error' => "Поле $field є обов'язковим"]);
         exit;
     }
 }
+
 
 if (!is_numeric($studentData['id']) || $studentData['id'] <= 0) {
     echo json_encode(['error' => 'Некоректний ID студента']);
@@ -60,10 +62,13 @@ if (!DateTime::createFromFormat('Y-m-d', $studentData['birthday'])) {
     exit;
 }
 if ($studentData['status'] !== true && $studentData['status'] !== false) {
+
     echo json_encode(['error' => 'Некоректний статус']);
     exit;
 }
 
+
 echo json_encode(['success' => true, 'data' => $studentData]);
+
 exit;
 ?>

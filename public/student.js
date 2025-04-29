@@ -91,7 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
             birthday: document.getElementById('birthday').value,
             status: document.getElementById('status').checked 
         };
-
         if (formMode === 'edit') {
             studentData.id = document.getElementById('studentId').value;
         } else {
@@ -137,6 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('confirmDelete').addEventListener('click', () => {
         if (deleteConfirmModal.dataset.multiDelete === 'true') {
             const selectedRows = getSelectedRows();
+
             const ids = selectedRows.map(row => row.dataset.id).filter(id => id);
             if (ids.length === 0) {
                 alert('Помилка: Не вибрано жодного студента');
@@ -159,6 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(response => response.json())
             .then(data => {
                 console.log('Відповідь сервера:', data); 
+
                 if (data.error) {
                     alert(`Помилка: ${data.error}`);
                 } else {
@@ -175,9 +176,11 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         } else {
             const rowId = deleteConfirmModal.dataset.rowId;
+
             if (!rowId) {
                 alert('Помилка: ID студента не визначено');
                 return;
+
             }
 
             const formData = new URLSearchParams();
@@ -243,6 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 month: '2-digit',
                 year: 'numeric'
             }).replace(/\//g, '.') : '';
+
 
         newRow.innerHTML = `
             <td><input type="checkbox"></td>
