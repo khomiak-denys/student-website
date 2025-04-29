@@ -1,7 +1,6 @@
 const CACHE_NAME = 'student-data-v1';
 const urlsToCache = [
-    '/public/',
-    '/public/students.html',
+    '/public/students.php',
     '/public/students.css',
     '/public/student.js',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
@@ -39,7 +38,8 @@ self.addEventListener('fetch', event => {
                 }
                 return fetch(event.request)
                     .then(response => {
-                        if (!response || response.status !== 200 || response.type !== 'basic') {
+                        // Перевіряємо, чи запит можна кешувати
+                        if (!response || response.status !== 200 || response.type !== 'basic' || event.request.method !== 'GET') {
                             return response;
                         }
                         const responseToCache = response.clone();
