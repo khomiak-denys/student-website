@@ -1,10 +1,12 @@
 <?php
 header('Content-Type: application/json');
 
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['error' => 'should be POST method']);
     exit;
 }
+
 
 $data = $_POST;
 error_log('Data recieved : ' . print_r($data, true));
@@ -14,9 +16,11 @@ if (isset($data['action']) && $data['action'] === 'delete') {
         echo json_encode(['error' => 'ID for delete not set ']);
         exit;
     }
+
     echo json_encode(['success' => true]);
     exit;
 }
+
 
 if (!isset($data['data']) || empty($data['data'])) {
     echo json_encode(['error' => 'Data not send']);
@@ -37,6 +41,7 @@ foreach ($required_fields as $field) {
         exit;
     }
 }
+
 
 if (!is_numeric($studentData['id']) || $studentData['id'] <= 0) {
     echo json_encode(['error' => 'invalid student id']);
@@ -66,7 +71,6 @@ if ($studentData['status'] !== true && $studentData['status'] !== false) {
     echo json_encode(['error' => 'invalid status']);
     exit;
 }
-
 echo json_encode(['success' => true, 'data' => $studentData]);
 exit;
 ?>
