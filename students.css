@@ -1,0 +1,211 @@
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    background-color: transparent; 
+}
+
+.nav-item.dropdown .dropdown-menu {
+    margin-top: 0; 
+    background-color: transparent; 
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    background-color: white;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.profile-icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.profile-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-bottom: 5px; 
+}
+
+.username {
+    font-weight: normal;
+    text-align: center; 
+    margin: 0;
+    font-size: 80%;
+}
+
+.message {
+    font-weight: normal;
+    margin: 5px 0 0;
+    font-size: 80%;
+    text-align: left;
+}
+
+.unread .username, .unread .message {
+    font-weight: bold;
+}
+
+.notification-item.read .username {
+    font-style: normal;
+    color: black;
+}
+
+.activeBtn {
+    font-weight: bold;
+}
+
+.bell-icon {
+    font-size: 30px;
+    color: white;
+}
+
+.rounded-circle {
+    filter: invert(1);
+}
+
+.profile-link {
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.status {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.active {
+    background-color: green;
+}
+
+.inactive {
+    background-color: lightgray;
+}
+
+td {
+    text-align: center;
+}
+
+.notification-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 6px;
+    height: 6px;
+    background-color: red;
+    border-radius: 50%;
+    animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0.1; transform: scale(1.1); }
+}
+
+.sidebar .nav-link {
+    color: black;
+    font-size: 20px;
+}
+
+.action-btn {
+    border: none;
+}
+
+.add-btn {
+    border-color: black;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(-120%); 
+}
+
+.add-btn:hover {
+    background-color: grey;
+}
+
+.add-btn:active {
+    background-color: grey !important;
+}
+
+.btn-outline-secondary {
+    border: none;
+}
+
+.pagination .page-link {
+    color: black;
+}
+
+.pagination .page-item.active .page-link {
+    color: white;
+    background-color: black;
+    border-color: black;
+}
+
+.notification-wrapper .dropdown-menu {
+    right: 0;
+    left: auto;
+}
+
+.table-wrapper {
+    position: relative;
+    margin-top: 40px; /* Невеликий відступ між заголовком і таблицею з кнопкою */
+}
+
+@media (max-width: 991px) {
+    .table td, .table th {
+        white-space: nowrap;
+    }
+    .navbar-brand {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .profile-wrapper {
+        display: none; /* Ховаємо профіль із navbar на малих екранах */
+    }
+    .sidebar-nav {
+        display: none; /* Ховаємо навігацію із sidebar на малих екранах */
+    }
+    .offcanvas-header .profile-wrapper {
+        display: flex;
+        margin-bottom: 0;
+        justify-content: flex-start; /* Вирівнювання профілю по лівому краю */
+    }
+    .offcanvas-header .profile-link {
+        justify-content: flex-start; /* Вирівнювання іконки та тексту по лівому краю */
+    }
+    .offcanvas-body .dropdown-menu {
+        background-color: white;
+        color: black;
+        border: none;
+        position: static;
+        width: 100%;
+    }
+    .offcanvas-body .dropdown-item {
+        color: black;
+    }
+    .offcanvas-body .dropdown-item:hover {
+        background-color: #343a40;
+    }
+    .offcanvas-body .sidebar-nav {
+        display: flex;
+    }
+    .offcanvas-body .sidebar-nav .nav-link {
+        color: white;
+        font-size: 20px;
+    }
+    .notification-dot {
+        top: 3px;
+        right: 3px;
+    }
+}
