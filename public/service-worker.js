@@ -1,8 +1,12 @@
 const CACHE_NAME = 'student-data-v1';
 const urlsToCache = [
-    '/public/students.php',
-    '/public/students.css',
-    '/public/student.js',
+    './students.php',
+    './students.css',
+    './student.js',
+    './manifest.json',
+    '../icons/profile-icon.svg',
+    '../icons/icon-192.png',
+    '../icons/icon-512.png',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
     'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'
@@ -12,7 +16,7 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('Кешування ресурсів');
+                console.log('Resource caching');
                 return cache.addAll(urlsToCache);
             })
     );

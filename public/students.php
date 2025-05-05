@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Website</title>
-    <link rel="icon" href="/icons/icon-192.png" type="image/png">
-    <link rel="manifest" href="/public/manifest.json">
+    <link rel="icon" href="./icon-192.png" type="image/png">
+    <link rel="manifest" href="./manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="students.css">
@@ -26,7 +26,7 @@
                 <ul class="dropdown-menu notification-dropdown dropdown-menu-end">
                     <div class="notification-item unread">
                         <div class="profile-icon-container">
-                            <img src="/icons/profile-icon.svg" alt="User Icon" class="profile-icon">
+                            <img src="../icons/profile-icon.svg" alt="User Icon" class="profile-icon">
                             <p class="username"><em>John D.</em></p>
                         </div>
                         <div class="notification-content">
@@ -35,7 +35,7 @@
                     </div>
                     <div class="notification-item unread">
                         <div class="profile-icon-container">
-                            <img src="/icons/profile-icon.svg" alt="User Icon" class="profile-icon">
+                            <img src="../icons/profile-icon.svg" alt="User Icon" class="profile-icon">
                             <p class="username"><em>Vitalii K.</em></p>
                         </div>
                         <div class="notification-content">
@@ -47,7 +47,7 @@
             <div class="profile-wrapper d-flex align-items-center">
                 <div class="dropdown">
                     <a class="nav-link profile-link text-white" href="#" role="button" data-bs-toggle="dropdown">
-                        <img src="/icons/profile-icon.svg" alt="Профіль" class="rounded-circle me-2" width="30"> Johny Sins
+                        <img src="../icons/profile-icon.svg" alt="Профіль" class="rounded-circle me-2" width="30"> Johny Sins
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -244,12 +244,12 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/public/service-worker.js')
+                navigator.serviceWorker.register('./service-worker.js')
                     .catch(err => console.log('Service Worker registration error: ', err));
             });
         }
     </script> 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="student.js"></script>
+    <script src="./student.js"></script>
 </body>
 </html>
