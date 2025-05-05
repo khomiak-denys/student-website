@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function moveElements() {
         if (!profileWrapper || !sidebarNav || !navbarContainer || !sidebar || !offcanvasHeader || !offcanvasBody) {
-            return; // Перериваємо виконання, якщо елементи відсутні
+            return;
         }
 
         if (window.innerWidth < 992) {
