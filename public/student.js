@@ -74,24 +74,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('saveStudent').addEventListener('click', () => {
         const formMode = studentForm.dataset.mode;
-        
-        let studentIdCounter = 0;
-        const getUserId = document.querySelector("table#list-students tbody tr:last-child");
-        if (getUserId) studentIdCounter += +getUserId.dataset.id;
 
         const studentData = {
-            id: formMode === 'edit' ? document.getElementById('studentId').value : String(++studentIdCounter),
             groupId: document.getElementById('group').value,
             firstName: document.getElementById('firstName').value,
             lastName: document.getElementById('lastName').value,
             genderId: document.getElementById('gender').value,
             birthday: document.getElementById('birthday').value,
-            status: document.getElementById('status').checked 
+            status: document.getElementById('status').checked
         };
+
         if (formMode === 'edit') {
             studentData.id = document.getElementById('studentId').value;
-        } else {
-            studentData.id = String(++studentIdCounter); 
         }
 
         const formData = new URLSearchParams();
@@ -123,7 +117,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     'invalid gender': 'gender',
                     'invalid birthday': 'birthday',
                     'invalid status': 'status',
-                    'invalid student id': 'studentId'
+                    'invalid student id': 'studentId',
+                    'student not found': 'studentId'
                 };
                 const fieldId = fieldMap[data.error.toLowerCase()];
                 if (fieldId) {
@@ -136,10 +131,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (formMode === 'edit') {
                     const rowToUpdate = tableBody.querySelector(`tr[data-id="${studentForm.dataset.editRowId}"]`);
                     if (rowToUpdate) {
-                        updateRowSelective(rowToUpdate, studentData);
+                        updateRowSelective(rowToUpdate, data.data);
+                        saveToCache(data.data);
                     }
                 } else {
-                    addNewRow(studentData);
+                    addNewRow(data.data);
+                    saveToCache(data.data);
                 }
                 studentModal.hide();
             }
@@ -179,11 +176,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (rowToDelete) {
                     rowToDelete.remove();
                 }
+                if('caches' in window){
+                    caches.open('student-data-v1').then(cache => {
+                        cache.delete(`/student-data/${rowId}`).then(() => {
+                            console.log(`Deleted from cache: /student-data/${rowId}`);
+                        });
+                    }).catch(error => {
+                        console.error('Cache delete error:', error);
+                    });
+                }
                 deleteConfirmModal.hide();
             }
         })
         .catch(error => {
-            console.error('Delete error:', error);
+            console.log('Delete error:', error);
         });
     });
 
@@ -201,7 +207,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const genderText = document.querySelector(`#gender option[value="${data.genderId}"]`)?.textContent || '';
         const genderDisplay = genderText === 'Male' ? 'M' : genderText === 'Female' ? 'F' : genderText;
         const formattedDate = data.birthday ?
-
             new Date(data.birthday).toLocaleDateString('uk-UA', {
                 day: '2-digit',
                 month: '2-digit',
@@ -263,7 +268,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 cache.put(`/student-data/${data.id}`, response);
             }).catch(error => {
                 console.error('Cache error:', error);
-
             });
         }
     }

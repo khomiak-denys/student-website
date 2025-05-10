@@ -1,15 +1,31 @@
+<?php
+try {
+    $pdo = new PDO('mysql:host=localhost;dbname=student_management', 'student_user', '1234');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die('Database connection failed: ' . $e->getMessage());
+}
+
+$groups = $pdo->query("SELECT id, name FROM groups")->fetchAll(PDO::FETCH_ASSOC);
+$genders = $pdo->query("SELECT id, name FROM genders")->fetchAll(PDO::FETCH_ASSOC);
+
+// Завантаження студентів
+$students = $pdo->query("SELECT s.id, s.group_id, g.name as group_name, s.first_name, s.last_name, s.gender_id, gen.name as gender_name, s.birthday, s.status 
+                         FROM list_students s 
+                         JOIN groups g ON s.group_id = g.id 
+                         JOIN genders gen ON s.gender_id = gen.id")->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Website</title>
-    <link rel="icon" href="./icon-192.png" type="image/png">
+    <link rel="icon" href="../icons/icon-192.png" type="image/png">
     <link rel="manifest" href="./manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="students.css">
-    <?php include 'arrays.php'; ?>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -61,9 +77,7 @@
         <div class="offcanvas-header">
             <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="offcanvas"></button>
         </div>
-        <div class="offcanvas-body">
-            
-        </div>
+        <div class="offcanvas-body"></div>
     </div>
     <div class="container-fluid mt-5 pt-4">
         <div class="row">
@@ -83,7 +97,7 @@
                                 <h5 class="modal-title" id="studentModalLabel">Add/Edit student</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">    
+                            <div class="modal-body">
                                 <form id="studentForm">
                                     <input type="hidden" id="studentId">
                                     <div class="mb-3 row">
@@ -92,7 +106,7 @@
                                             <select class="form-select" id="group" required>
                                                 <option value="">Select group</option>
                                                 <?php foreach ($groups as $group): ?>
-                                                    <option value="<?php echo $group['id']; ?>"><?php echo $group['name']; ?></option>
+                                                    <option value="<?php echo $group['id']; ?>"><?php echo htmlspecialchars($group['name']); ?></option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
@@ -115,7 +129,7 @@
                                             <select class="form-select" id="gender" required>
                                                 <option value="">Select Gender</option>
                                                 <?php foreach ($genders as $gender): ?>
-                                                    <option value="<?php echo $gender['id']; ?>"><?php echo $gender['name']; ?></option>
+                                                    <option value="<?php echo $gender['id']; ?>"><?php echo htmlspecialchars($gender['name']); ?></option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
@@ -178,56 +192,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr data-id="1"
-                                data-group-id="3"
-                                data-first-name="Denys"
-                                data-last-name="Khomiak"
-                                data-gender-id="1"
-                                data-birthday="2006-02-17"
-                                data-status="true">
-                                                            
-                                <td><input type="checkbox"></td>
-                                <td><b>PZ-23</b></td>
-                                <td><b>Denys Khomiak</b></td>
-                                <td><b>M</b></td>
-                                <td><b>17.02.2006</b></td>
-                                <td><span class="status active"></span></td>
-                                <td class="align-middle">
-                                    <button class="btn btn-sm btn-outline-primary add-edit-btn" data-id="1">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-primary delete-btn" data-id="1">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                </td> 
-                                </tr>
-                                <tr data-id="2"
-                                    data-group-id="3"
-                                    data-first-name="Maria"
-                                    data-last-name="Semionyk"
-                                    data-gender-id="2"
-                                    data-birthday="2006-06-19"
-                                    data-status="true">
-                                    <td><input type="checkbox"></td>
-                                    <td><b>PZ-23</b></td>
-                                    <td><b>Maria Semionyk</b></td>
-                                    <td><b>F</b></td>
-                                    <td><b>19.06.2006</b></td>
-                                    <td><span class="status active"></span></td>
-                                    <td class="align-middle">
-                                        <button class="btn btn-sm btn-outline-primary add-edit-btn" data-id="2">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-primary delete-btn" data-id="2">
-                                            <i class="bi bi-x-lg"></i>
-                                        </button>
-                                    </td> 
-                                </tr> 
+                                <?php foreach ($students as $student): ?>
+                                    <tr data-id="<?php echo $student['id']; ?>"
+                                        data-group-id="<?php echo $student['group_id']; ?>"
+                                        data-first-name="<?php echo htmlspecialchars($student['first_name']); ?>"
+                                        data-last-name="<?php echo htmlspecialchars($student['last_name']); ?>"
+                                        data-gender-id="<?php echo $student['gender_id']; ?>"
+                                        data-birthday="<?php echo $student['birthday']; ?>"
+                                        data-status="<?php echo $student['status'] ? 'true' : 'false'; ?>">
+                                        <td><input type="checkbox"></td>
+                                        <td><b><?php echo htmlspecialchars($student['group_name']); ?></b></td>
+                                        <td><b><?php echo htmlspecialchars($student['first_name'] . ' ' . $student['last_name']); ?></b></td>
+                                        <td><b><?php echo $student['gender_name'] === 'Male' ? 'M' : ($student['gender_name'] === 'Female' ? 'F' : $student['gender_name']); ?></b></td>
+                                        <td><b><?php echo date('d.m.Y', strtotime($student['birthday'])); ?></b></td>
+                                        <td><span class="status <?php echo $student['status'] ? 'active' : ''; ?>"></span></td>
+                                        <td class="align-middle">
+                                            <button class="btn btn-sm btn-outline-primary add-edit-btn" data-id="<?php echo $student['id']; ?>">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-primary delete-btn" data-id="<?php echo $student['id']; ?>">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
-
                 <nav>
                     <ul class="pagination justify-content-center">
                         <li class="page-item disabled"><a class="page-link"><</a></li>
@@ -248,7 +240,7 @@
                     .catch(err => console.log('Service Worker registration error: ', err));
             });
         }
-    </script> 
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./student.js"></script>
 </body>
