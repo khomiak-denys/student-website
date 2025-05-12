@@ -1,18 +1,14 @@
 <?php
+
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['error' => 'should be POST method']);
     exit;
-} else {
-
-try {
-    $pdo = new PDO('mysql:host=localhost;dbname=student_management', 'student_user', '1234');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo json_encode(['error' => 'database connection failed']);
-    exit;
 }
+    
+require_once 'options.php';
+
 
 $data = $_POST;
 
@@ -22,14 +18,14 @@ if (isset($data['action']) && $data['action'] === 'delete') {
         exit;
     }
 
-    $stmt = $pdo->prepare("SELECT id FROM list_students WHERE id = :id");
+    $stmt = $pdo->prepare("SELECT id FROM students WHERE id = :id");
     $stmt->execute(['id' => $data['id']]);
     if (!$stmt->fetchColumn()) {
         echo json_encode(['error' => 'student not found']);
         exit;
     }
 
-    $stmt = $pdo->prepare("DELETE FROM list_students WHERE id = :id");
+    $stmt = $pdo->prepare("DELETE FROM students WHERE id = :id");
     $stmt->execute(['id' => $data['id']]);
 
     echo json_encode(['success' => true]);
@@ -43,7 +39,7 @@ if (!isset($data['data']) || empty($data['data'])) {
 
 $studentData = json_decode($data['data'], true);
 if (json_last_error() !== JSON_ERROR_NONE) {
-    echo json_encode(['error' => 'invalid JSON format']);
+    echo json_encode(['error' => 'invalid JSON format: ' . json_last_error_msg()]);
     exit;
 }
 
@@ -88,22 +84,18 @@ if ($studentData['status'] !== true && $studentData['status'] !== false) {
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT id FROM groups WHERE id = :groupId");
-$stmt->execute(['groupId' => $studentData['groupId']]);
-if (!$stmt->fetchColumn()) {
+if (!isset($groups[$studentData['groupId']])) {
     echo json_encode(['error' => 'invalid group id']);
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT id FROM genders WHERE id = :genderId");
-$stmt->execute(['genderId' => $studentData['genderId']]);
-if (!$stmt->fetchColumn()) {
+if (!isset($genders[$studentData['genderId']])) {
     echo json_encode(['error' => 'invalid gender id']);
     exit;
 }
 
 if (isset($studentData['id'])) {
-    $stmt = $pdo->prepare("SELECT id FROM list_students WHERE id = :id");
+    $stmt = $pdo->prepare("SELECT id FROM students WHERE id = :id");
     $stmt->execute(['id' => $studentData['id']]);
     if (!$stmt->fetchColumn()) {
         echo json_encode(['error' => 'student not found']);
@@ -111,7 +103,7 @@ if (isset($studentData['id'])) {
     }
 
     $stmt = $pdo->prepare("
-        UPDATE list_students 
+        UPDATE students 
         SET group_id = :groupId, first_name = :firstName, last_name = :lastName, 
             gender_id = :genderId, birthday = :birthday, status = :status 
         WHERE id = :id
@@ -127,7 +119,7 @@ if (isset($studentData['id'])) {
     ]);
 } else {
     $stmt = $pdo->prepare("
-        INSERT INTO list_students (group_id, first_name, last_name, gender_id, birthday, status)
+        INSERT INTO students (group_id, first_name, last_name, gender_id, birthday, status)
         VALUES (:groupId, :firstName, :lastName, :genderId, :birthday, :status)
     ");
     $stmt->execute([
@@ -143,5 +135,4 @@ if (isset($studentData['id'])) {
 
 echo json_encode(['success' => true, 'data' => $studentData]);
 exit;
-}
 ?>

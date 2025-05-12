@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
             birthday: document.getElementById('birthday').value,
             status: document.getElementById('status').checked
         };
+        
 
         if (formMode === 'edit') {
             studentData.id = document.getElementById('studentId').value;
@@ -179,10 +180,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 if('caches' in window){
                     caches.open('student-data-v1').then(cache => {
                         cache.delete(`/student-data/${rowId}`).then(() => {
-                            console.log(`Deleted from cache: /student-data/${rowId}`);
                         });
                     }).catch(error => {
-                        console.error('Cache delete error:', error);
                     });
                 }
                 deleteConfirmModal.hide();
@@ -193,47 +192,46 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    function addNewRow(data) {
-        const newRow = document.createElement('tr');
-        newRow.dataset.id = data.id;
-        newRow.dataset.groupId = data.groupId;
-        newRow.dataset.genderId = data.genderId;
-        newRow.dataset.birthday = data.birthday;
-        newRow.dataset.status = String(data.status);
-        newRow.dataset.firstName = data.firstName;
-        newRow.dataset.lastName = data.lastName;
+        function addNewRow(data) {
+            const newRow = document.createElement('tr');
+            newRow.dataset.id = data.id;
+            newRow.dataset.groupId = data.groupId;
+            newRow.dataset.genderId = data.genderId;
+            newRow.dataset.birthday = data.birthday;
+            newRow.dataset.status = String(data.status);
+            newRow.dataset.firstName = data.firstName;
+            newRow.dataset.lastName = data.lastName;
 
-        const groupText = document.querySelector(`#group option[value="${data.groupId}"]`)?.textContent || '';
-        const genderText = document.querySelector(`#gender option[value="${data.genderId}"]`)?.textContent || '';
-        const genderDisplay = genderText === 'Male' ? 'M' : genderText === 'Female' ? 'F' : genderText;
-        const formattedDate = data.birthday ?
-            new Date(data.birthday).toLocaleDateString('uk-UA', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            }).replace(/\//g, '.') : '';
+            const groupText = document.querySelector(`#group option[value="${data.groupId}"]`)?.textContent || '';
+            const genderText = document.querySelector(`#gender option[value="${data.genderId}"]`)?.textContent || '';
+            const formattedDate = data.birthday ?
+                new Date(data.birthday).toLocaleDateString('uk-UA', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                }).replace(/\//g, '.') : '';
 
-        newRow.innerHTML = `
-            <td><input type="checkbox"></td>
-            <td><b>${groupText}</b></td>
-            <td><b>${data.firstName} ${data.lastName}</b></td>
-            <td><b>${genderDisplay}</b></td>
-            <td><b>${formattedDate}</b></td>
-            <td><span class="status ${data.status === true ? 'active' : ''}"></span></td>
-            <td class="align-middle">
-                <button class="btn btn-sm btn-outline-primary add-edit-btn" data-id="${data.id}">
-                    <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-primary delete-btn" data-id="${data.id}">
-                    <i class="bi bi-x-lg"></i>
-                </button>
-            </td>
-        `;
-        tableBody.appendChild(newRow);
+            newRow.innerHTML = `
+                <td><input type="checkbox"></td>
+                <td><b>${groupText}</b></td>
+                <td><b>${data.firstName} ${data.lastName}</b></td>
+                <td><b>${genderText}</b></td>
+                <td><b>${formattedDate}</b></td>
+                <td><span class="status ${data.status === true ? 'active' : ''}"></span></td>
+                <td class="align-middle">
+                    <button class="btn btn-sm btn-outline-primary add-edit-btn" data-id="${data.id}">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary delete-btn" data-id="${data.id}">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </td>
+            `;
+            tableBody.appendChild(newRow);
 
-        newRow.querySelector('.add-edit-btn').addEventListener('click', addEditBtnClick);
-        newRow.querySelector('.delete-btn').addEventListener('click', deleteBtnClick);
-    }
+            newRow.querySelector('.add-edit-btn').addEventListener('click', addEditBtnClick);
+            newRow.querySelector('.delete-btn').addEventListener('click', deleteBtnClick);
+        }
 
     function updateRowSelective(row, newData) {
         row.dataset.id = newData.id;

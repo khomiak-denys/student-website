@@ -1,23 +1,6 @@
-<?php
-try {
-    $pdo = new PDO('mysql:host=localhost;dbname=student_management', 'student_user', '1234');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die('Database connection failed: ' . $e->getMessage());
-}
-
-$groups = $pdo->query("SELECT id, name FROM groups")->fetchAll(PDO::FETCH_ASSOC);
-$genders = $pdo->query("SELECT id, name FROM genders")->fetchAll(PDO::FETCH_ASSOC);
-
-// Завантаження студентів
-$students = $pdo->query("SELECT s.id, s.group_id, g.name as group_name, s.first_name, s.last_name, s.gender_id, gen.name as gender_name, s.birthday, s.status 
-                         FROM list_students s 
-                         JOIN groups g ON s.group_id = g.id 
-                         JOIN genders gen ON s.gender_id = gen.id")->fetchAll(PDO::FETCH_ASSOC);
-?>
 <!DOCTYPE html>
 <html lang="uk">
-<head>
+<head>  
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Website</title>
@@ -26,8 +9,10 @@ $students = $pdo->query("SELECT s.id, s.group_id, g.name as group_name, s.first_
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="students.css">
+    
 </head>
 <body>
+    <?php require_once 'options.php'; ?>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
             <button class="btn btn-dark d-lg-none me-3" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
@@ -105,8 +90,8 @@ $students = $pdo->query("SELECT s.id, s.group_id, g.name as group_name, s.first_
                                         <div class="col-sm-8">
                                             <select class="form-select" id="group" required>
                                                 <option value="">Select group</option>
-                                                <?php foreach ($groups as $group): ?>
-                                                    <option value="<?php echo $group['id']; ?>"><?php echo htmlspecialchars($group['name']); ?></option>
+                                                <?php foreach ($groups as $id => $name): ?>
+                                                    <option value="<?= $id; ?>"><?= htmlspecialchars($name); ?></option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
@@ -128,8 +113,8 @@ $students = $pdo->query("SELECT s.id, s.group_id, g.name as group_name, s.first_
                                         <div class="col-sm-8">
                                             <select class="form-select" id="gender" required>
                                                 <option value="">Select Gender</option>
-                                                <?php foreach ($genders as $gender): ?>
-                                                    <option value="<?php echo $gender['id']; ?>"><?php echo htmlspecialchars($gender['name']); ?></option>
+                                                <?php foreach ($genders as $id => $name): ?>
+                                                    <option value="<?= $id; ?>"><?= htmlspecialchars($name); ?></option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
@@ -193,24 +178,24 @@ $students = $pdo->query("SELECT s.id, s.group_id, g.name as group_name, s.first_
                             </thead>
                             <tbody>
                                 <?php foreach ($students as $student): ?>
-                                    <tr data-id="<?php echo $student['id']; ?>"
-                                        data-group-id="<?php echo $student['group_id']; ?>"
-                                        data-first-name="<?php echo htmlspecialchars($student['first_name']); ?>"
-                                        data-last-name="<?php echo htmlspecialchars($student['last_name']); ?>"
-                                        data-gender-id="<?php echo $student['gender_id']; ?>"
-                                        data-birthday="<?php echo $student['birthday']; ?>"
-                                        data-status="<?php echo $student['status'] ? 'true' : 'false'; ?>">
+                                    <tr data-id="<?= $student['id']; ?>"
+                                        data-group-id="<?= $student['group_id']; ?>"
+                                        data-first-name="<?= htmlspecialchars($student['first_name']); ?>"
+                                        data-last-name="<?= htmlspecialchars($student['last_name']); ?>"
+                                        data-gender-id="<?= $student['gender_id']; ?>"
+                                        data-birthday="<?= $student['birthday']; ?>"
+                                        data-status="<?= $student['status'] ? 'true' : 'false'; ?>">
                                         <td><input type="checkbox"></td>
-                                        <td><b><?php echo htmlspecialchars($student['group_name']); ?></b></td>
-                                        <td><b><?php echo htmlspecialchars($student['first_name'] . ' ' . $student['last_name']); ?></b></td>
-                                        <td><b><?php echo $student['gender_name'] === 'Male' ? 'M' : ($student['gender_name'] === 'Female' ? 'F' : $student['gender_name']); ?></b></td>
-                                        <td><b><?php echo date('d.m.Y', strtotime($student['birthday'])); ?></b></td>
-                                        <td><span class="status <?php echo $student['status'] ? 'active' : ''; ?>"></span></td>
+                                        <td><b><?= htmlspecialchars($groups[ $student['group_id']]); ?></b></td>
+                                        <td><b><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']); ?></b></td>
+                                        <td><b><?= htmlspecialchars($genders[ $student['gender_id']]); ?></b></td>
+                                        <td><b><?= date('d.m.Y', strtotime($student['birthday'])); ?></b></td>
+                                        <td><span class="status <?= $student['status'] ? 'active' : ''; ?>"></span></td>
                                         <td class="align-middle">
-                                            <button class="btn btn-sm btn-outline-primary add-edit-btn" data-id="<?php echo $student['id']; ?>">
+                                            <button class="btn btn-sm btn-outline-primary add-edit-btn" data-id="<?= $student['id']; ?>">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-outline-primary delete-btn" data-id="<?php echo $student['id']; ?>">
+                                            <button class="btn btn-sm btn-outline-primary delete-btn" data-id="<?= $student['id']; ?>">
                                                 <i class="bi bi-x-lg"></i>
                                             </button>
                                         </td>
