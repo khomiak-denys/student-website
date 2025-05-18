@@ -20,7 +20,7 @@
             </button>
             <a class="navbar-brand" href="#">CMS</a>
             <div class="dropdown notification-wrapper ms-auto me-3 position-relative">
-                <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
+                <a class="nav-link" href="messages.html" role="button">
                     <i class="bi bi-bell bell-icon"></i>
                     <span class="notification-dot"></span>
                 </a>
@@ -69,7 +69,7 @@
             <nav class="col-md-2 d-none d-md-block sidebar p-3">
                 <ul class="nav flex-column sidebar-nav">
                     <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link activeBtn" href="students.php">Students</a></li>
+                    <li class="nav-item"><a class="nav-link active-btn" href="students.php">Students</a></li>
                     <li class="nav-item"><a class="nav-link" href="tasks.html">Tasks</a></li>
                 </ul>
             </nav>

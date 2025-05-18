@@ -1,0 +1,78 @@
+.chat-container {
+    height: calc(100vh - 160px);
+    min-height: 500px;
+}
+
+/* Стилі для лівої панелі зі списком чатів */
+.chat-list-panel {
+    border-right: 1px solid #dee2e6;
+    height: 100%;
+}
+
+.chat-list {
+    max-height: calc(100% - 50px);
+    overflow-y: auto;
+}
+
+/* Стилі для правої панелі з чатом */
+.chat-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chat-messages-section {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Стилі для аватарів користувачів */
+.avatar-wrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Стилі для повідомлень */
+.message-row {
+    margin-bottom: 15px;
+}
+
+.message-content {
+    max-width: 70%;
+    word-break: break-word;
+}
+
+.message-sender {
+    color: #6c757d;
+    margin-bottom: 2px;
+}
+
+/* Стилі для поля введення повідомлення */
+.message-input-section {
+    padding-top: 10px;
+    border-top: 1px solid #dee2e6;
+    margin-top: auto;
+}
+
+/* Адаптивність для мобільних пристроїв */
+@media (max-width: 768px) {
+    .chat-list-panel {
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #dee2e6;
+        margin-bottom: 15px;
+    }
+    
+    .chat-container {
+        height: auto;
+    }
+    
+    .chat-panel {
+        height: calc(100vh - 260px);
+    }
+}

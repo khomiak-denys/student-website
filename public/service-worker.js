@@ -1,4 +1,4 @@
-const CACHE_NAME = 'student-data-v1';
+/*const CACHE_NAME = 'student-data-v1';
 const urlsToCache = [
     './students.php',
     './students.css',
@@ -10,7 +10,7 @@ const urlsToCache = [
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
     'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'
-];
+];*/
 
 self.addEventListener('install', event => {
     event.waitUntil(

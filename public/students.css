@@ -1,3 +1,6 @@
+/* ======================
+   🔹 Навігація (Navbar)
+   ====================== */
 .nav-item.dropdown:hover .dropdown-menu {
     display: block;
     background-color: transparent; 
@@ -6,6 +9,23 @@
 .nav-item.dropdown .dropdown-menu {
     margin-top: 0; 
     background-color: transparent; 
+}
+
+/* ======================
+   🔹 Сповіщення
+   ====================== */
+.notification-wrapper:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.notification-wrapper .dropdown-menu {
+    right: 0;
+    left: auto;
+    margin-top: 0;
+    transition: all 0.3s;
 }
 
 .notification-item {
@@ -21,80 +41,14 @@
     border-bottom: none;
 }
 
-.profile-icon-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 10px;
-}
-
-.profile-icon {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    margin-bottom: 5px; 
-}
-
-.username {
-    font-weight: normal;
-    text-align: center; 
-    margin: 0;
-    font-size: 80%;
-}
-
-.message {
-    font-weight: normal;
-    margin: 5px 0 0;
-    font-size: 80%;
-    text-align: left;
-}
-
-.unread .username, .unread .message {
+.unread .username,
+.unread .message {
     font-weight: bold;
 }
 
 .notification-item.read .username {
     font-style: normal;
     color: black;
-}
-
-.activeBtn {
-    font-weight: bold;
-}
-
-.bell-icon {
-    font-size: 30px;
-    color: white;
-}
-
-.rounded-circle {
-    filter: invert(1);
-}
-
-.profile-link {
-    color: white;
-    display: flex;
-    align-items: center;
-}
-
-.status {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    display: inline-block;
-    background-color: lightgray;
-}
-
-.status.active {
-    background-color: green;
-}
-
-td {
-    text-align: center;
-}
-
-.error-field {
-    border: 2px solid red !important; 
 }
 
 .notification-dot {
@@ -113,43 +67,119 @@ td {
     100% { opacity: 0.1; transform: scale(1.1); }
 }
 
-.sidebar .nav-link {
-    color: black;
-    font-size: 20px;
+/* ======================
+   🔹 Профіль
+   ====================== */
+.profile-icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
 }
 
-.add-edit-btn {
+.profile-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-bottom: 5px; 
+}
+
+.profile-link {
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.rounded-circle {
+    filter: invert(1);
+}
+
+.username {
+    font-weight: normal;
+    text-align: center; 
+    margin: 0;
+    font-size: 80%;
+}
+
+.message {
+    font-weight: normal;
+    margin: 5px 0 0;
+    font-size: 80%;
+    text-align: left;
+}
+
+/* ======================
+   🔹 Статус
+   ====================== */
+.status {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    background-color: lightgray;
+}
+
+.status.active {
+    background-color: green;
+}
+.active-btn {
+    font-weight: bold;
+}
+
+/* ======================
+   🔹 Кнопки (Додати/Редагувати/Видалити)
+   ====================== */
+.add-edit-btn,
+.delete-btn {
     border-color: black;
     border-radius: 0%;
     color: black;
 }
-.add-edit-btn:hover{
+
+.add-edit-btn:hover,
+.delete-btn:hover {
     background-color: grey;
     border-color: transparent;
 }
-.add-edit-btn:active{
+
+.add-edit-btn:active,
+.delete-btn:active {
     background-color: darkgrey !important;
     border-color: transparent !important;
 }
-.delete-btn{
-    border-color: black;
-    border-radius: 0%;
-    color: black;
-}
-.delete-btn:hover{
-    background-color: grey;
-    border-color: transparent;
-}
-.delete-btn:active{
-    background-color: darkgrey !important;
-    border-color: transparent !important;
-}
+
 .add-edit-btn[data-id="0"] {
     position: absolute;
     top: 0;
     right: 0;
     transform: translateY(-120%); 
 }
+
+/* ======================
+   🔹 Таблиця
+   ====================== */
+.table-wrapper {
+    position: relative;
+    margin-top: 40px; 
+}
+
+.table td, 
+.table th,
+td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* ======================
+   🔹 Помилки
+   ====================== */
+.error-field {
+    border: 2px solid red !important; 
+}
+
+/* ======================
+   🔹 Пагінація
+   ====================== */
 .pagination .page-link {
     color: black;
 }
@@ -160,43 +190,53 @@ td {
     border-color: black;
 }
 
-.notification-wrapper .dropdown-menu {
-    right: 0;
-    left: auto;
+/* ======================
+   🔹 Sidebar
+   ====================== */
+.sidebar .nav-link {
+    color: black;
+    font-size: 20px;
 }
 
-.table-wrapper {
-    position: relative;
-    margin-top: 40px; 
-}
-.table td, .table th {
-    text-align: center;
-    vertical-align: middle;
+/* ======================
+   🔹 Іконка дзвіночка
+   ====================== */
+.bell-icon {
+    font-size: 30px;
+    color: white;
 }
 
+/* ======================
+   🔹 Адаптивність
+   ====================== */
 @media (max-width: 991px) {
     .table td, .table th {
         white-space: nowrap;
+    }
+
+    .profile-wrapper {
+        display: none;
+    }
+
+    .sidebar-nav {
+        display: none;
+    }
+
+    .offcanvas-header .profile-wrapper {
+        display: flex;
+        margin-bottom: 0;
+        justify-content: flex-start;
+    }
+
+    .offcanvas-header .profile-link {
+        justify-content: flex-start;
     }
     .navbar-brand {
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
     }
-    .profile-wrapper {
-        display: none; /* Ховаємо профіль із navbar на малих екранах */
-    }
-    .sidebar-nav {
-        display: none; /* Ховаємо навігацію із sidebar на малих екранах */
-    }
-    .offcanvas-header .profile-wrapper {
-        display: flex;
-        margin-bottom: 0;
-        justify-content: flex-start; /* Вирівнювання профілю по лівому краю */
-    }
-    .offcanvas-header .profile-link {
-        justify-content: flex-start; /* Вирівнювання іконки та тексту по лівому краю */
-    }
+
     .offcanvas-body .dropdown-menu {
         background-color: white;
         color: black;
@@ -204,19 +244,24 @@ td {
         position: static;
         width: 100%;
     }
+
     .offcanvas-body .dropdown-item {
         color: black;
     }
+
     .offcanvas-body .dropdown-item:hover {
         background-color: #343a40;
     }
+
     .offcanvas-body .sidebar-nav {
         display: flex;
     }
+
     .offcanvas-body .sidebar-nav .nav-link {
         color: white;
         font-size: 20px;
     }
+
     .notification-dot {
         top: 3px;
         right: 3px;
