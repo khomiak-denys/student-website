@@ -1,89 +1,187 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const socket = io('http://localhost:3000');
+    let currentUserId = null;
+    let currentRoomId = null;
+    let currentUsername = null;
 
-    const chatListItems = document.querySelectorAll('.chat-list .list-group-item');
-    const chatHeader = document.querySelector('.chat-header h5');
-    const messageInput = document.querySelector('.message-input-section input');
-    const messageForm = document.querySelector('.message-input-section form');
+    const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('username');
+    const chatList = document.querySelector('.chat-list');
+    const chatHeader = document.querySelector('#chat-room-title');
+    const messageInput = document.getElementById('message-input');
+    const messageForm = document.getElementById('message-form');
     const chatMessages = document.querySelector('.chat-messages');
+    const membersList = document.getElementById('members-list');
+    const profileUsername = document.getElementById('profile-username');
 
-    // Обробник кліку на елементи списку чатів
-    chatListItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Виділення активного чату
-            chatListItems.forEach(el => el.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Оновлення заголовка чату
-            const chatName = this.querySelector('span').textContent;
-            chatHeader.textContent = 'Chat room ' + chatName;
-            
-        });
-    });
+    loginModal.show();
 
-    messageForm.addEventListener('submit', function(e) {
+    loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        
-        const messageText = messageInput.value.trim();
-        if (messageText) {
-            // Додавання нового повідомлення в чат
-            addMessage(messageText, 'me');
-            messageInput.value = '';
+        const username = usernameInput.value.trim();
+        if (username) {
+            socket.emit('login', { username }, (response) => {
+                if (response.success) {
+                    currentUserId = response.userId;
+                    currentUsername = response.username;
+                    currentRoomId = response.generalRoomId;
+                    profileUsername.textContent = currentUsername;
+                    loginModal.hide();
+                    loadUsers();
+                    loadMessages(currentRoomId);
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            });
         }
     });
 
-    function addMessage(text, sender) {
-        const messageRow = document.createElement('div');
-        messageRow.className = sender === 'me' ? 
-            'message-row d-flex mb-3 justify-content-end' : 
-            'message-row d-flex mb-3';
-        
-        if (sender === 'me') {
-            messageRow.innerHTML = `
-                <div class="message-content bg-primary text-white p-2 rounded">
-                    <div class="message-text">${text}</div>
-                </div>
-                <div class="avatar-wrapper bg-secondary text-white ms-2">
-                    <i class="bi bi-person"></i>
-                </div>
-                <div class="message-sender small text-end">Me</div>
+    function loadUsers() {
+        socket.emit('getUsers', (users) => {
+            chatList.innerHTML = `
+                <a href="#" class="list-group-item list-group-item-action active bg-dark d-flex align-items-center" data-room="${currentRoomId}">
+                    <div class="avatar-wrapper bg-dark text-white me-2">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <span>General</span>
+                    <span class="badge bg-danger ms-auto notification-badge d-none">0</span>
+                </a>
             `;
-        } else {
-            messageRow.innerHTML = `
-                <div class="avatar-wrapper bg-secondary text-white me-2">
-                    <i class="bi bi-person"></i>
-                </div>
-                <div class="message-content bg-light p-2 rounded">
-                    <div class="message-sender small">${sender}</div>
-                    <div class="message-text">${text}</div>
-                </div>
-            `;
-        }
-        
-        chatMessages.appendChild(messageRow);
-        
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+            users.forEach((user) => {
+                const userItem = document.createElement('a');
+                userItem.href = '#';
+                userItem.className = 'list-group-item list-group-item-action bg-dark d-flex align-items-center';
+                userItem.dataset.userId = user._id;
+                userItem.innerHTML = `
+                    <div class="avatar-wrapper bg-dark text-white me-2">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    <span>${user.username}</span>
+                    <span class="badge bg-danger ms-auto notification-badge d-none">0</span>
+                `;
+                chatList.appendChild(userItem);
+            });
+            addChatListListeners();
+        });
     }
-    
-    const notificationWrapper = document.querySelector('.notification-wrapper');
-    if (notificationWrapper) {
-        // CSS для показу dropdown при наведенні вже повинен бути доданий у стилі
-        
-        // Додавання посилання на сторінку повідомлень при кліку на дзвоник
-        const bellIcon = notificationWrapper.querySelector('.nav-link');
-        if (bellIcon) {
-            bellIcon.setAttribute('href', 'messages.html');
-            
-            // Запобігання закриттю dropdown при кліку на його елементи
-            const dropdownMenu = notificationWrapper.querySelector('.dropdown-menu');
-            if (dropdownMenu) {
-                dropdownMenu.addEventListener('click', function(e) {
-                    e.stopPropagation();
+
+    function addChatListListeners() {
+    const chatListItems = document.querySelectorAll('.chat-list .list-group-item');
+    chatListItems.forEach((item) => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            chatListItems.forEach((el) => el.classList.remove('active'));
+            this.classList.add('active');
+            const roomId = this.dataset.room;
+            const userId = this.dataset.userId;
+
+            console.log('Chat clicked, roomId:', roomId, 'userId:', userId);
+
+            if (roomId) {
+                currentRoomId = roomId;
+                chatHeader.textContent = this.querySelector('span').textContent === 'General' 
+                    ? 'Chat room General' 
+                    : `Chat with ${this.querySelector('span').textContent}`;
+                loadMessages(currentRoomId);
+            } else {
+                socket.emit('createPrivateChat', { recipientId: userId }, (response) => {
+                    if (response.success) {
+                        currentRoomId = response.roomId;
+                        chatHeader.textContent = `Chat with ${response.recipientName}`;
+                        this.dataset.room = response.roomId;
+                        
+                        delete this.dataset.userId;
+                        console.log('Private chat created, roomId:', response.roomId);
+                        loadMessages(currentRoomId);
+                    } else {
+                        alert('Error: ' + response.error);
+                    }
                 });
             }
-        }
+            const badge = this.querySelector('.notification-badge');
+            if (badge) {
+                badge.textContent = '0';
+                badge.classList.add('d-none');
+            }
+        });
+    });
     }
+
+    function loadMessages(roomId) {
+        chatMessages.innerHTML = '';
+        socket.emit('getMessages', { roomId }, (messages) => {
+            messages.forEach((msg) => {
+                addMessage(msg.text, msg.senderName, msg.senderId === currentUserId);
+            });
+        });
+    }
+
+    function addMessage(text, sender, isMe) {
+    const messageRow = document.createElement('div');
+    messageRow.className = isMe
+        ? 'message-row d-flex mb-3 justify-content-end'
+        : 'message-row d-flex mb-3';
+    messageRow.innerHTML = isMe
+        ? `
+            <div class="message-content bg-dark text-white p-2 rounded">
+                <div class="message-text">${text}</div>
+            </div>
+            <div class="avatar-wrapper bg-dark text-white ms-2">
+                <i class="bi bi-person"></i>
+            </div>
+            <div class="message-sender small text-end">Me</div>
+        `
+        : `
+            <div class="avatar-wrapper bg-secondary text-white me-2">
+                <i class="bi bi-person"></i>
+            </div>
+            <div class="message-sender small text-center me-2">${sender}</div>
+            <div class="message-content bg-light p-2 rounded">
+                <div class="message-text">${text}</div>
+            </div>
+        `;
+    chatMessages.appendChild(messageRow);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+    messageForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const text = messageInput.value.trim();
+        if (text && currentRoomId) {
+            socket.emit('sendMessage', { roomId: currentRoomId, text });
+            messageInput.value = '';
+        } else {
+            console.log('Cannot send message: text or roomId missing', { text, currentRoomId });
+        }
+    });
+
+    socket.on('newMessage', ({ roomId, senderId, senderName, text }) => {
+        if (roomId === currentRoomId) {
+            addMessage(text, senderName, senderId === currentUserId);
+        } else {
+            const chatItem = document.querySelector(`.chat-list .list-group-item[data-room="${roomId}"]`) ||
+                             document.querySelector(`.chat-list .list-group-item[data-user-id="${senderId}"]`);
+            if (chatItem) {
+                const badge = chatItem.querySelector('.notification-badge');
+                let count = parseInt(badge.textContent) || 0;
+                badge.textContent = count + 1;
+                badge.classList.remove('d-none');
+            }
+        }
+    });
+
+    socket.on('updateMembers', ({ roomId, members }) => {
+        if (roomId === currentRoomId) {
+            membersList.innerHTML = members
+                .map(() => `
+                    <div class="avatar-wrapper bg-secondary text-white me-2">
+                        <i class="bi bi-person"></i>
+                    </div>
+                `)
+                .join('');
+        }
+    });
 
     const profileWrapper = document.querySelector('.profile-wrapper');
     const sidebarNav = document.querySelector('.sidebar-nav');
@@ -93,10 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.querySelector('.sidebar');
 
     function moveElements() {
-        if (!profileWrapper || !sidebarNav || !navbarContainer || !sidebar || !offcanvasHeader || !offcanvasBody) {
-            return; // Перериваємо виконання, якщо елементи відсутні
-        }
-
+        if (!profileWrapper || !sidebarNav || !navbarContainer || !sidebar || !offcanvasHeader || !offcanvasBody) return;
         if (window.innerWidth < 992) {
             const closeBtn = offcanvasHeader.querySelector('.btn-close');
             if (closeBtn && !offcanvasHeader.contains(profileWrapper)) {
@@ -119,8 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    window.addEventListener("load", moveElements);
-    window.addEventListener("resize", moveElements);
+    window.addEventListener('load', moveElements);
+    window.addEventListener('resize', moveElements);
     moveElements();
 });
-

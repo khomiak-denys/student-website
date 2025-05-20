@@ -1,12 +1,18 @@
+/* ============================= */
+/*          Загальні стилі       */
+/* ============================= */
 .chat-container {
     height: calc(100vh - 160px);
     min-height: 500px;
 }
 
-/* Стилі для лівої панелі зі списком чатів */
+/* ============================= */
+/*     Ліва панель зі списком    */
+/* ============================= */
 .chat-list-panel {
-    border-right: 1px solid #dee2e6;
     height: 100%;
+    border: solid 1px black;
+    border-radius: 0%;
 }
 
 .chat-list {
@@ -14,52 +20,139 @@
     overflow-y: auto;
 }
 
-/* Стилі для правої панелі з чатом */
-.chat-panel {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+.chat-list .list-group-item {
+    position: relative;
+    color: white;
+    background-color: rgb(33, 34, 37);
+    border: none;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }
 
-.chat-messages-section {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding-right: 10px;
+.new-chat-room {
+    border: none;
+    color: black !important;
+    pointer-events: none;
 }
 
-/* Стилі для аватарів користувачів */
-.avatar-wrapper {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.notification-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
 }
 
-/* Стилі для повідомлень */
+/* ============================= */
+/*        Стилі повідомлень       */
+/* ============================= */
 .message-row {
-    margin-bottom: 15px;
+    position: relative;
+    margin-bottom: 20px;
 }
 
 .message-content {
     max-width: 70%;
-    word-break: break-word;
+    word-wrap: break-word;
 }
 
 .message-sender {
+    position: absolute;
+    bottom: -15px;
+    font-size: 0.75rem;
     color: #6c757d;
-    margin-bottom: 2px;
+    width: 36px; /* Ширина аватарки */
+    text-align: center;
 }
 
-/* Стилі для поля введення повідомлення */
+.message-row:not(.justify-content-end) .message-sender {
+    left: 0;
+}
+
+
+.message-row.justify-content-end .message-sender {
+    right: 0;
+    
+}
+
+.message-text {
+    line-height: 1.4;
+}
+
+/* ============================= */
+/*        Права чат-панель       */
+/* ============================= */
+.chat-panel {
+    margin-left: 5%;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: solid 1px black;
+    border-radius: 0%;
+    padding-bottom: 10px;
+}
+
+
+/* ============================= */
+/*      Ввід повідомлення        */
+/* ============================= */
 .message-input-section {
     padding-top: 10px;
-    border-top: 1px solid #dee2e6;
+    border-top: 1px solid #ccc;
     margin-top: auto;
 }
 
-/* Адаптивність для мобільних пристроїв */
+#message-input {
+    border-radius: 20px;
+}
+
+.message-input-section button {
+    border-radius: 50%;
+    border: none;
+    width: 40px;
+    height: 40px;
+}
+
+/* ============================= */
+/*     Аватари користувачів      */
+/* ============================= */
+.avatar-wrapper {
+    background-color: #d9d9d9;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    color: #fff;
+}
+
+/* ============================= */
+/*        Модальне вікно         */
+/* ============================= */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: none;
+}
+
+.modal-title {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.login-btn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    border: none;
+}
+
+/* ============================= */
+/*     Адаптивність (мобільні)   */
+/* ============================= */
 @media (max-width: 768px) {
     .chat-list-panel {
         height: auto;
@@ -67,11 +160,11 @@
         border-bottom: 1px solid #dee2e6;
         margin-bottom: 15px;
     }
-    
+
     .chat-container {
         height: auto;
     }
-    
+
     .chat-panel {
         height: calc(100vh - 260px);
     }
