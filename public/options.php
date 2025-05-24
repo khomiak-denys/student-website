@@ -1,5 +1,7 @@
 <?php
 
+require_once('node_api.php');
+
 try {
     $pdo = new PDO('mysql:host=localhost;dbname=student_management', 'student_user', '1234');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -9,7 +11,7 @@ try {
 
 $students = $pdo->query("SELECT id, group_id, first_name, last_name, gender_id, birthday, status 
                          FROM students")->fetchAll(PDO::FETCH_ASSOC);
-                         
+ 
 $groups = [
     1 => 'PZ-21',
     2 => 'PZ-22',

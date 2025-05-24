@@ -22,7 +22,7 @@
                     <form id="loginForm">
                         <div class="mb-3">
                             <label for="username" class="form-label">Name</label>
-                            <input type="text" class="form-control"  placeholder="Enter your name..." id="username" required>
+                            <input type="text" class="form-control" placeholder="Enter your name..." id="username" required>
                         </div>
                         <button type="submit" class="btn btn-primary login-btn bg-dark">Login</button>
                     </form>
@@ -96,46 +96,40 @@
             </nav>
             <main class="col-md-10 ms-sm-auto px-md-4">
                 <h2 class="mt-4">Messages</h2>
-                    <div class="container-fluid chat-container mt-5">
-                        <div class="row">
-                            <div class="col-md-3 chat-list-panel">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 class="mb-0">Chat room</h5>
-                                    <button class="btn btn-sm btn-outline-primary new-chat-room">+ New chat room</button>
-                                </div>
-                                <div class="list-group chat-list">
-                                    <a href="#" class="list-group-item list-group-item-action active bg-dark d-flex align-items-center" data-room="General">
-                                        <div class="avatar-wrapper  bg-dark text-white me-2">
-                                            <i class="bi bi-people"></i>
-                                        </div>
-                                        <span>General</span>
-                                        <span class="badge bg-danger ms-auto notification-badge d-none">0</span>
-                                    </a>
+                <div class="container-fluid chat-container mt-5">
+                    <div class="row">
+                        <div class="col-md-3 chat-list-panel">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Chat room</h5>
+                                <button class="btn btn-sm btn-outline-primary new-chat-room">+ New chat room</button>
+                            </div>
+                            <div class="list-group chat-list">
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-9 chat-panel">
+                            <div class="chat-header border-bottom pb-3 mb-3">
+                                <h5 id="chat-room-title">Chat room General</h5>
+                                <div class="members-section">
+                                    <h6 class="mb-2">Members</h6>
+                                    <div class="members-list d-flex" id="members-list"></div>
                                 </div>
                             </div>
-                            <div class="col-md-9 chat-panel">
-                                <div class="chat-header border-bottom pb-3 mb-3">
-                                    <h5 id="chat-room-title">Chat room General</h5>
-                                    <div class="members-section">
-                                        <h6 class="mb-2">Members</h6>
-                                        <div class="members-list d-flex" id="members-list"></div>
-                                    </div>
-                                </div>
-                                <div class="chat-messages-section">
-                                    <h6 class="mb-3">Messages</h6>
-                                    <div class="chat-messages"></div>
-                                </div>
-                                <div class="message-input-section mt-4 position-relative">
-                                    <form class="d-flex" id="message-form">
-                                        <input type="text" class="form-control" placeholder="Type your message here..." id="message-input">
-                                        <button type="submit" class="btn btn-outline-primary ms-2">
-                                            <i class="bi bi-arrow-right"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </div> 
+                            <div class="chat-messages-section">
+                                <h6 class="mb-3">Messages</h6>
+                                <div class="chat-messages"></div>
+                            </div>
+                            <div class="message-input-section mt-4 position-relative">
+                                <form class="d-flex" id="message-form">
+                                    <input type="text" class="form-control" placeholder="Type your message here..." id="message-input">
+                                    <button type="submit" class="btn btn-outline-primary ms-2">
+                                        <i class="bi bi-arrow-right"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
+                </div>
             </main>
         </div>
     </div>

@@ -278,24 +278,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.querySelector('.sidebar');
 
     function moveElements() {
+        if (!profileWrapper || !sidebarNav || !navbarContainer || !sidebar || !offcanvasHeader || !offcanvasBody) {
+            return; // Перериваємо виконання, якщо елементи відсутні
+        }
+
         if (window.innerWidth < 992) {
-            if (offcanvasHeader && profileWrapper) {
-                const closeBtn = offcanvasHeader.querySelector('.btn-close');
-                if (closeBtn) {
-                    offcanvasHeader.insertBefore(profileWrapper, closeBtn);
-                    profileWrapper.style.display = 'flex';
-                }
+            const closeBtn = offcanvasHeader.querySelector('.btn-close');
+            if (closeBtn && !offcanvasHeader.contains(profileWrapper)) {
+                offcanvasHeader.insertBefore(profileWrapper, closeBtn);
+                profileWrapper.style.display = 'flex';
             }
-            if (offcanvasBody && sidebarNav) {
+            if (!offcanvasBody.contains(sidebarNav)) {
                 offcanvasBody.appendChild(sidebarNav);
                 sidebarNav.style.display = 'flex';
             }
         } else {
-            if (navbarContainer && profileWrapper) {
+            if (!navbarContainer.contains(profileWrapper)) {
                 navbarContainer.appendChild(profileWrapper);
                 profileWrapper.style.display = 'flex';
             }
-            if (sidebar && sidebarNav) {
+            if (!sidebar.contains(sidebarNav)) {
                 sidebar.appendChild(sidebarNav);
                 sidebarNav.style.display = 'flex';
             }

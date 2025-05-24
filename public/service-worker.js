@@ -1,6 +1,6 @@
 const CACHE_NAME = 'student-data-v1';
 const urlsToCache = [
-    './students.php',
+    './students.php',       
     './students.css',
     './student.js',
     './manifest.json',

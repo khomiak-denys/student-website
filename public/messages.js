@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const socket = io('http://localhost:3000');
+
+    const serverUrl = typeof nodeServerUrl !== 'undefined' ? nodeServerUrl : 'http://localhost:3000';
+    const socket = io(serverUrl);
+    
     let currentUserId = null;
     let currentRoomId = null;
     let currentUsername = null;
@@ -15,12 +18,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const membersList = document.getElementById('members-list');
     const profileUsername = document.getElementById('profile-username');
 
+    const savedUsername = localStorage.getItem('chatUsername');
+    
+    if (savedUsername) {
+        usernameInput.value = savedUsername;
+    }
+    
     loginModal.show();
 
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const username = usernameInput.value.trim();
         if (username) {
+            localStorage.setItem('chatUsername', username);
+            
             socket.emit('login', { username }, (response) => {
                 if (response.success) {
                     currentUserId = response.userId;
@@ -67,45 +78,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function addChatListListeners() {
-    const chatListItems = document.querySelectorAll('.chat-list .list-group-item');
-    chatListItems.forEach((item) => {
-        item.addEventListener('click', function (e) {
-            e.preventDefault();
-            chatListItems.forEach((el) => el.classList.remove('active'));
-            this.classList.add('active');
-            const roomId = this.dataset.room;
-            const userId = this.dataset.userId;
+        const chatListItems = document.querySelectorAll('.chat-list .list-group-item');
+        chatListItems.forEach((item) => {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                chatListItems.forEach((el) => el.classList.remove('active'));
+                this.classList.add('active');
+                const roomId = this.dataset.room;
+                const userId = this.dataset.userId;
 
-            console.log('Chat clicked, roomId:', roomId, 'userId:', userId);
+                console.log('Chat clicked, roomId:', roomId, 'userId:', userId);
 
-            if (roomId) {
-                currentRoomId = roomId;
-                chatHeader.textContent = this.querySelector('span').textContent === 'General' 
-                    ? 'Chat room General' 
-                    : `Chat with ${this.querySelector('span').textContent}`;
-                loadMessages(currentRoomId);
-            } else {
-                socket.emit('createPrivateChat', { recipientId: userId }, (response) => {
-                    if (response.success) {
-                        currentRoomId = response.roomId;
-                        chatHeader.textContent = `Chat with ${response.recipientName}`;
-                        this.dataset.room = response.roomId;
-                        
-                        delete this.dataset.userId;
-                        console.log('Private chat created, roomId:', response.roomId);
-                        loadMessages(currentRoomId);
-                    } else {
-                        alert('Error: ' + response.error);
-                    }
-                });
-            }
-            const badge = this.querySelector('.notification-badge');
-            if (badge) {
-                badge.textContent = '0';
-                badge.classList.add('d-none');
-            }
+                if (roomId) {
+                    currentRoomId = roomId;
+                    chatHeader.textContent = this.querySelector('span').textContent === 'General' 
+                        ? 'Chat room General' 
+                        : `Chat with ${this.querySelector('span').textContent}`;
+                    loadMessages(currentRoomId);
+                } else {
+                    socket.emit('createPrivateChat', { recipientId: userId }, (response) => {
+                        if (response.success) {
+                            currentRoomId = response.roomId;
+                            chatHeader.textContent = `Chat with ${response.recipientName}`;
+                            this.dataset.room = response.roomId;
+                            
+                            delete this.dataset.userId;
+                            console.log('Private chat created, roomId:', response.roomId);
+                            loadMessages(currentRoomId);
+                        } else {
+                            alert('Error: ' + response.error);
+                        }
+                    });
+                }
+                const badge = this.querySelector('.notification-badge');
+                if (badge) {
+                    badge.textContent = '0';
+                    badge.classList.add('d-none');
+                }
+            });
         });
-    });
     }
 
     function loadMessages(roomId) {
@@ -114,36 +125,38 @@ document.addEventListener("DOMContentLoaded", () => {
             messages.forEach((msg) => {
                 addMessage(msg.text, msg.senderName, msg.senderId === currentUserId);
             });
+            // Прокручування вниз до останнього повідомлення
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         });
     }
 
     function addMessage(text, sender, isMe) {
-    const messageRow = document.createElement('div');
-    messageRow.className = isMe
-        ? 'message-row d-flex mb-3 justify-content-end'
-        : 'message-row d-flex mb-3';
-    messageRow.innerHTML = isMe
-        ? `
-            <div class="message-content bg-dark text-white p-2 rounded">
-                <div class="message-text">${text}</div>
-            </div>
-            <div class="avatar-wrapper bg-dark text-white ms-2">
-                <i class="bi bi-person"></i>
-            </div>
-            <div class="message-sender small text-end">Me</div>
-        `
-        : `
-            <div class="avatar-wrapper bg-secondary text-white me-2">
-                <i class="bi bi-person"></i>
-            </div>
-            <div class="message-sender small text-center me-2">${sender}</div>
-            <div class="message-content bg-light p-2 rounded">
-                <div class="message-text">${text}</div>
-            </div>
-        `;
-    chatMessages.appendChild(messageRow);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
+        const messageRow = document.createElement('div');
+        messageRow.className = isMe
+            ? 'message-row d-flex mb-3 justify-content-end'
+            : 'message-row d-flex mb-3';
+        messageRow.innerHTML = isMe
+            ? `
+                <div class="message-content bg-dark text-white p-2 rounded">
+                    <div class="message-text">${text}</div>
+                </div>
+                <div class="avatar-wrapper bg-dark text-white ms-2">
+                    <i class="bi bi-person"></i>
+                </div>
+                <div class="message-sender small text-end">Me</div>
+            `
+            : `
+                <div class="avatar-wrapper bg-secondary text-white me-2">
+                    <i class="bi bi-person"></i>
+                </div>
+                <div class="message-sender small text-center me-2">${sender}</div>
+                <div class="message-content bg-light p-2 rounded">
+                    <div class="message-text">${text}</div>
+                </div>
+            `;
+        chatMessages.appendChild(messageRow);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 
     messageForm.addEventListener('submit', (e) => {
         e.preventDefault();

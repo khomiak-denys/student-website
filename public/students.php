@@ -20,7 +20,7 @@
             </button>
             <a class="navbar-brand" href="#">CMS</a>
             <div class="dropdown notification-wrapper ms-auto me-3 position-relative">
-                <a class="nav-link" href="messages.html" role="button">
+                <a class="nav-link" href="messages.php" role="button">
                     <i class="bi bi-bell bell-icon"></i>
                     <span class="notification-dot"></span>
                 </a>
