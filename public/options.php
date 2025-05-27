@@ -1,7 +1,5 @@
 <?php
 
-require_once('node_api.php');
-
 try {
     $pdo = new PDO('mysql:host=localhost;dbname=student_management', 'student_user', '1234');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

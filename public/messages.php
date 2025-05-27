@@ -8,8 +8,8 @@
     <link rel="manifest" href="./manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="students.css">
-    <link rel="stylesheet" href="messages.css">
+    <link rel="stylesheet" href="styles.css">
+
 </head>
 <body>
     <div class="modal fade" id="loginModal" tabindex="-1">
@@ -137,5 +137,6 @@
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="messages.js"></script>
+    <script src="student.js"></script>
 </body>
 </html>

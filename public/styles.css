@@ -1,0 +1,451 @@
+/* ===============================================
+   🌟 ЗАГАЛЬНІ СТИЛІ
+   =============================================== */
+
+.chat-container {
+    height: calc(100vh - 160px);
+    min-height: 500px;
+}
+
+/* ===============================================
+   🔹 НАВІГАЦІЯ (NAVBAR)
+   =============================================== */
+
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    background-color: transparent; 
+}
+
+.nav-item.dropdown .dropdown-menu {
+    margin-top: 0; 
+    background-color: transparent; 
+}
+
+
+/* ===============================================
+   🔹 СПОВІЩЕННЯ (NOTIFICATIONS)
+   =============================================== */
+
+.notification-wrapper:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.notification-wrapper .dropdown-menu {
+    right: 0;
+    left: auto;
+    margin-top: 0;
+    transition: all 0.3s;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    background-color: white;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item.read .username {
+    font-style: normal;
+    color: black;
+}
+
+.notification-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.notification-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 6px;
+    height: 6px;
+    background-color: red;
+    border-radius: 50%;
+    animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0.1; transform: scale(1.1); }
+}
+
+.bell-icon {
+    font-size: 30px;
+    color: white;
+}
+
+/* ===============================================
+   🔹 ПРОФІЛЬ (PROFILE)
+   =============================================== */
+
+.profile-icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.profile-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-bottom: 5px; 
+}
+
+.profile-link {
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.rounded-circle {
+    filter: invert(1);
+}
+
+.avatar-wrapper {
+    background-color: #d9d9d9;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    color: #fff;
+}
+
+/* ===============================================
+   🔹 СТАТУС
+   =============================================== */
+
+.status {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    background-color: lightgray;
+}
+
+.status.active {
+    background-color: green;
+}
+
+.active-btn {
+    font-weight: bold;
+}
+
+/* ===============================================
+   🔹 КНОПКИ (BUTTONS)
+   =============================================== */
+
+.add-edit-btn,
+.delete-btn {
+    border-color: black;
+    border-radius: 0%;
+    color: black;
+}
+
+.add-edit-btn:hover,
+.delete-btn:hover {
+    background-color: grey;
+    border-color: transparent;
+}
+
+.add-edit-btn:active,
+.delete-btn:active {
+    background-color: darkgrey !important;
+    border-color: transparent !important;
+}
+
+.add-edit-btn[data-id="0"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(-120%); 
+}
+
+.login-btn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    border: none;
+}
+
+/* ===============================================
+   🔹 ТАБЛИЦІ (TABLES)
+   =============================================== */
+
+.table-wrapper {
+    position: relative;
+    margin-top: 40px; 
+}
+
+.table td, 
+.table th,
+td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* ===============================================
+   🔹 ПОМИЛКИ (ERRORS)
+   =============================================== */
+
+.error-field {
+    border: 2px solid red !important; 
+}
+
+/* ===============================================
+   🔹 ПАГІНАЦІЯ (PAGINATION)
+   =============================================== */
+
+.pagination .page-link {
+    color: black;
+}
+
+.pagination .page-item.active .page-link {
+    color: white;
+    background-color: black;
+    border-color: black;
+}
+
+/* ===============================================
+   🔹 SIDEBAR
+   =============================================== */
+
+.sidebar .nav-link {
+    color: black;
+    font-size: 20px;
+}
+
+/* ===============================================
+   🔹 ЧАТ - ЛІВА ПАНЕЛЬ (CHAT LIST)
+   =============================================== */
+
+.chat-list-panel {
+    height: 100%;
+    border: solid 1px black;
+    border-radius: 0%;
+}
+
+.chat-list {
+    max-height: calc(100% - 50px);
+    overflow-y: auto;
+}
+
+.chat-list .list-group-item {
+    position: relative;
+    color: white;
+    background-color: rgb(33, 34, 37);
+    border: none;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.new-chat-room {
+    border: none;
+    color: black !important;
+    pointer-events: none;
+}
+
+/* ===============================================
+   🔹 ЧАТ - ПРАВА ПАНЕЛЬ (CHAT PANEL)
+   =============================================== */
+
+#members-list {
+    font-size: 0.8rem;
+    gap: 10px;
+}
+.chat-panel {
+    margin-left: 5%;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: solid 1px black;
+    border-radius: 0%;
+    padding-bottom: 10px;
+}
+
+/* ===============================================
+   🔹 ПОВІДОМЛЕННЯ (MESSAGES)
+   =============================================== */
+
+.message-row {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.message-content {
+    max-width: 70%;
+    word-wrap: break-word;
+}
+
+.message-sender {
+    position: absolute;
+    bottom: -15px;
+    font-size: 0.75rem;
+    color: #6c757d;
+    width: 36px; /* Ширина аватарки */
+    text-align: center;
+}
+
+.message-row:not(.justify-content-end) .message-sender {
+    left: 0;
+}
+
+.message-row.justify-content-end .message-sender {
+    right: 0;
+}
+
+.message-text {
+    line-height: 1.4;
+}
+
+/* ===============================================
+   🔹 ВВІД ПОВІДОМЛЕННЯ (MESSAGE INPUT)
+   =============================================== */
+
+.message-input-section {
+    padding-top: 10px;
+    border-top: 1px solid #ccc;
+    margin-top: auto;
+}
+
+#message-input {
+    border-radius: 20px;
+}
+
+.message-input-section button {
+    border-radius: 50%;
+    border: none;
+    width: 40px;
+    height: 40px;
+}
+
+/* ===============================================
+   🔹 МОДАЛЬНІ ВІКНА (MODALS)
+   =============================================== */
+
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: none;
+}
+
+.modal-title {
+    flex-grow: 1;
+    text-align: center;
+}
+
+/* ===============================================
+   🔹 ТЕКСТОВІ СТИЛІ (TEXT STYLES)
+   =============================================== */
+
+.username {
+    font-weight: normal;
+    text-align: center; 
+    margin: 0;
+    font-size: 80%;
+}
+
+.message {
+    font-weight: normal;
+    margin: 5px 0 0;
+    font-size: 80%;
+    text-align: left;
+}
+
+
+/* ===============================================
+   🔹 АДАПТИВНІСТЬ (RESPONSIVE DESIGN)
+   =============================================== */
+@media (max-width: 991px) {
+    .table td, .table th {
+        white-space: nowrap;
+    }
+
+    .profile-wrapper {
+        display: none;
+    }
+
+    .sidebar-nav {
+        display: none;
+    }
+
+    .offcanvas-header .profile-wrapper {
+        display: flex;
+        margin-bottom: 0;
+        justify-content: flex-start;
+    }
+
+    .offcanvas-header .profile-link {
+        justify-content: flex-start;
+    }
+
+    .navbar-brand {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .offcanvas-body .dropdown-menu {
+        background-color: white;
+        color: black;
+        border: none;
+        position: static;
+        width: 100%;
+    }
+
+    .offcanvas-body .dropdown-item {
+        color: black;
+    }
+
+    .offcanvas-body .dropdown-item:hover {
+        background-color: #343a40;
+    }
+
+    .offcanvas-body .sidebar-nav {
+        display: flex;
+    }
+
+    .offcanvas-body .sidebar-nav .nav-link {
+        color: white;
+        font-size: 20px;
+    }
+
+    .notification-dot {
+        top: 3px;
+        right: 3px;
+    }
+}
+
+@media (max-width: 768px) {
+    .chat-list-panel {
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #dee2e6;
+        margin-bottom: 15px;
+    }
+
+    .chat-container {
+        height: auto;
+    }
+
+    .chat-panel {
+        height: calc(100vh - 260px);
+    }
+}

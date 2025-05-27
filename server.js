@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 
-
 function setCorsHeaders(res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -13,13 +12,11 @@ function setCorsHeaders(res) {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
 }
 
-
 function sendJSON(res, statusCode, data) {
     setCorsHeaders(res);
     res.writeHead(statusCode, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(data));
 }
-
 
 function serveStaticFile(res, filePath) {
     const extname = path.extname(filePath).toLowerCase();
@@ -54,29 +51,11 @@ function serveStaticFile(res, filePath) {
     });
 }
 
-
-function parseRequestBody(req, callback) {
-    let body = '';
-    req.on('data', chunk => {
-        body += chunk.toString();
-    });
-    req.on('end', () => {
-        try {
-            const parsedBody = body ? JSON.parse(body) : {};
-            callback(null, parsedBody);
-        } catch (err) {
-            callback(err, null);
-        }
-    });
-}
-
-
 const server = http.createServer((req, res) => {
     const parsedUrl = url.parse(req.url, true);
     const pathname = parsedUrl.pathname;
     const method = req.method;
 
- 
     if (method === 'OPTIONS') {
         setCorsHeaders(res);
         res.writeHead(200);
@@ -84,7 +63,6 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    // API Routes
     if (pathname.startsWith('/api/')) {
         if (pathname === '/api/connected-users' && method === 'GET') {
             handleGetConnectedUsers(res);
@@ -108,7 +86,6 @@ const server = http.createServer((req, res) => {
         filePath = path.join(__dirname, 'public', pathname);
     }
 
-    // Check if file exists and serve it
     fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
             res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -127,24 +104,23 @@ const io = socketIo(server, {
     }
 });
 
-// MongoDB connection
-mongoose.connect('mongodb://localhost:27017/student-website', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
+mongoose.connect('mongodb://localhost:27017/student-website').then(() => {
     console.log('Connected to MongoDB');
 }).catch(err => {
     console.error('MongoDB connection error:', err);
 });
 
-// MongoDB Schemas
 const userSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     username: {
         type: String,
         required: true,
         unique: true
-    }
+    },
+    rooms: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Room'
+    }]
 });
 
 const messageSchema = new mongoose.Schema({
@@ -155,7 +131,13 @@ const messageSchema = new mongoose.Schema({
     },
     senderId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
+    },
+    receiverId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
     },
     createdAt: {
         type: Date,
@@ -165,13 +147,6 @@ const messageSchema = new mongoose.Schema({
 
 const roomSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    name: {
-        type: String
-    },
-    participants: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }],
     messages: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Message'
@@ -182,10 +157,9 @@ const User = mongoose.model('User', userSchema);
 const Room = mongoose.model('Room', roomSchema);
 const Message = mongoose.model('Message', messageSchema);
 
-// API Handlers
 async function handleGetConnectedUsers(res) {
     try {
-        const users = await User.find().select('username _id');
+        const users = await User.find().select('username _id rooms');
         sendJSON(res, 200, users);
     } catch (err) {
         sendJSON(res, 500, { error: err.message });
@@ -194,7 +168,7 @@ async function handleGetConnectedUsers(res) {
 
 async function handleGetRooms(res) {
     try {
-        const rooms = await Room.find().select('name _id');
+        const rooms = await Room.find().select('_id');
         sendJSON(res, 200, rooms);
     } catch (err) {
         sendJSON(res, 500, { error: err.message });
@@ -206,24 +180,26 @@ async function handleGetRoomMessages(res, roomId) {
         const room = await Room.findById(roomId).populate({
             path: 'messages',
             populate: {
-                path: 'senderId',
+                path: 'senderId receiverId',
                 select: 'username'
             }
         });
-        
+
         if (!room) {
             sendJSON(res, 404, { error: 'Room not found' });
             return;
         }
-        
+
         const formattedMessages = room.messages.map(msg => ({
             _id: msg._id.toString(),
             senderId: msg.senderId._id.toString(),
             senderName: msg.senderId.username,
+            receiverId: msg.receiverId ? msg.receiverId._id.toString() : null,
+            receiverName: msg.receiverId ? msg.receiverId.username : null,
             text: msg.text,
             createdAt: msg.createdAt
         }));
-        
+
         sendJSON(res, 200, formattedMessages);
     } catch (err) {
         sendJSON(res, 500, { error: err.message });
@@ -236,49 +212,70 @@ io.on('connection', (socket) => {
     socket.on('login', async ({ username }, callback) => {
         try {
             let user = await User.findOne({ username });
-            let generalRoom = await Room.findOne({ name: 'General' });
-            
+            let generalRoom = await Room.findOne({});
+
             if (!user) {
                 user = new User({
                     _id: new mongoose.Types.ObjectId(),
-                    username
+                    username,
+                    rooms: []
                 });
                 await user.save();
             }
-            
+
             if (!generalRoom) {
                 generalRoom = new Room({
                     _id: new mongoose.Types.ObjectId(),
-                    name: 'General',
-                    participants: [],
                     messages: []
                 });
                 await generalRoom.save();
             }
-            
-            if (!generalRoom.participants.includes(user._id)) {
-                generalRoom.participants.push(user._id);
-                await generalRoom.save();
+
+            if (!user.rooms.includes(generalRoom._id)) {
+                user.rooms.push(generalRoom._id);
+                await user.save();
             }
-            
+
             socket.userId = user._id;
+            socket.username = user.username;
+            
             socket.join(generalRoom._id.toString());
-            callback({ 
-                success: true, 
-                userId: user._id, 
+            
+            // Надсилаємо оновлення списку учасників для загальної кімнати
+            const roomUsers = await User.find({ rooms: generalRoom._id }).select('username _id');
+            io.to(generalRoom._id.toString()).emit('updateMembers', {
+                roomId: generalRoom._id.toString(),
+                members: roomUsers.map(member => ({
+                    _id: member._id.toString(),
+                    username: member.username
+                }))
+            });
+
+            console.log('User logged in:', socket.userId, 'Username:', socket.username);
+            
+            callback({
+                success: true,
+                userId: user._id,
                 username: user.username,
-                generalRoomId: generalRoom._id 
+                generalRoomId: generalRoom._id
             });
         } catch (err) {
+            console.error('Login error:', err);
             callback({ success: false, error: err.message });
         }
     });
 
     socket.on('getUsers', async (callback) => {
         try {
-            const users = await User.find({ _id: { $ne: socket.userId } }).select('username _id');
-            callback(users);
+            const users = await User.find().select('username _id rooms');
+            const formattedUsers = users.map(user => ({
+                _id: user._id.toString(),
+                username: user.username,
+                rooms: user.rooms.map(roomId => roomId.toString())
+            }));
+            callback(formattedUsers);
         } catch (err) {
+            console.error('Get users error:', err);
             callback([]);
         }
     });
@@ -286,45 +283,63 @@ io.on('connection', (socket) => {
     socket.on('createPrivateChat', async ({ recipientId }, callback) => {
         try {
             console.log('Creating private chat with recipient:', recipientId, 'for user:', socket.userId);
-            
+
+            if (!socket.userId) {
+                throw new Error('User not logged in');
+            }
+
             const recipient = await User.findById(recipientId);
             if (!recipient) {
                 throw new Error('Recipient not found');
             }
 
-            let room = await Room.findOne({
-                name: null, 
-                participants: { 
-                    $all: [socket.userId, recipientId], 
-                    $size: 2 
-                }
+            const sender = await User.findById(socket.userId);
+            const commonRooms = await Room.find({
+                _id: { $in: sender.rooms.filter(roomId => recipient.rooms.includes(roomId)) }
             });
 
-            if (!room) {
+            const generalRoom = await Room.findOne({}).sort({ _id: 1 });
+            const privateRoom = commonRooms.find(room => !room._id.equals(generalRoom._id));
+
+            let room;
+            if (privateRoom) {
+                console.log('Found existing private room:', privateRoom._id);
+                room = privateRoom;
+            } else {
                 room = new Room({
                     _id: new mongoose.Types.ObjectId(),
-                    name: null, 
-                    participants: [socket.userId, recipientId],
                     messages: []
                 });
                 await room.save();
                 console.log('Created new private room:', room._id);
-            } else {
-                console.log('Found existing private room:', room._id);
+
+                sender.rooms.push(room._id);
+                recipient.rooms.push(room._id);
+                await sender.save();
+                await recipient.save();
             }
 
             socket.join(room._id.toString());
-            
             const recipientSocket = [...io.sockets.sockets.values()]
                 .find(s => s.userId && s.userId.toString() === recipientId);
             if (recipientSocket) {
                 recipientSocket.join(room._id.toString());
             }
 
-            callback({ 
-                success: true, 
+            // Надсилаємо оновлення списку учасників для приватної кімнати
+            const roomUsers = await User.find({ rooms: room._id }).select('username _id');
+            io.to(room._id.toString()).emit('updateMembers', {
                 roomId: room._id.toString(),
-                recipientName: recipient.username 
+                members: roomUsers.map(member => ({
+                    _id: member._id.toString(),
+                    username: member.username
+                }))
+            });
+
+            callback({
+                success: true,
+                roomId: room._id.toString(),
+                recipientName: recipient.username
             });
         } catch (err) {
             console.error('Error creating private chat:', err);
@@ -332,36 +347,76 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('sendMessage', async ({ roomId, text }) => {
+    socket.on('sendMessage', async ({ roomId, text, receiverId }, callback) => {
         try {
-            console.log('Received sendMessage:', { roomId, text, senderId: socket.userId });
+            console.log('Received sendMessage:', { roomId, text, senderId: socket.userId, receiverId });
+
+            if (!socket.userId) {
+                const error = 'User not logged in';
+                console.error(error);
+                if (callback && typeof callback === 'function') {
+                    callback({ success: false, error });
+                }
+                return;
+            }
+
             const room = await Room.findById(roomId);
             if (!room) {
+                const error = 'Room not found';
                 console.error('Room not found for roomId:', roomId);
-                throw new Error('Room not found');
+                if (callback && typeof callback === 'function') {
+                    callback({ success: false, error });
+                }
+                return;
             }
+
+            if (receiverId) {
+                const recipient = await User.findById(receiverId);
+                if (!recipient) {
+                    const error = 'Recipient not found';
+                    console.error(error);
+                    if (callback && typeof callback === 'function') {
+                        callback({ success: false, error });
+                    }
+                    return;
+                }
+            }
+
             const message = new Message({
                 _id: new mongoose.Types.ObjectId(),
                 text,
                 senderId: socket.userId,
+                receiverId: receiverId || null,
                 createdAt: new Date()
             });
             await message.save();
+
             room.messages.push(message._id);
             await room.save();
             console.log('Message saved:', message._id, 'in room:', roomId);
 
             const sender = await User.findById(socket.userId);
+            const receiver = receiverId ? await User.findById(receiverId) : null;
+
             io.to(roomId).emit('newMessage', {
                 roomId,
                 senderId: socket.userId,
                 senderName: sender.username,
+                receiverId: receiverId || null,
+                receiverName: receiver ? receiver.username : null,
                 text,
                 createdAt: message.createdAt
             });
             console.log('Emitted newMessage to room:', roomId);
+
+            if (callback && typeof callback === 'function') {
+                callback({ success: true });
+            }
         } catch (err) {
             console.error('Error sending message:', err);
+            if (callback && typeof callback === 'function') {
+                callback({ success: false, error: err.message });
+            }
         }
     });
 
@@ -371,26 +426,28 @@ io.on('connection', (socket) => {
             const room = await Room.findById(roomId).populate({
                 path: 'messages',
                 populate: {
-                    path: 'senderId',
+                    path: 'senderId receiverId',
                     select: 'username'
                 }
             });
-            
+
             if (!room) {
                 console.error('Room not found for roomId:', roomId);
                 return callback([]);
             }
-            
+
             console.log('Found messages:', room.messages.length, 'for roomId:', roomId);
-            
+
             const formattedMessages = room.messages.map(msg => ({
                 _id: msg._id.toString(),
                 senderId: msg.senderId._id.toString(),
                 senderName: msg.senderId.username,
+                receiverId: msg.receiverId ? msg.receiverId._id.toString() : null,
+                receiverName: msg.receiverId ? msg.receiverId.username : null,
                 text: msg.text,
                 createdAt: msg.createdAt
             }));
-            
+
             callback(formattedMessages);
         } catch (err) {
             console.error('Error fetching messages:', err);
@@ -399,7 +456,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
+        console.log('User disconnected:', socket.id, 'UserId:', socket.userId);
     });
 });
 
