@@ -111,25 +111,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function loadMessages(roomId) {
-        chatMessages.innerHTML = '';
-        socket.emit('getMessages', { roomId }, (messages) => {
-            messages.forEach((msg) => {
-                addMessage(msg.text, msg.senderName, msg.senderId === currentUserId);
-            });
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+    chatMessages.innerHTML = '';
+    socket.emit('getMessages', { roomId }, (messages) => {
+        messages.forEach((msg) => {
+            addMessage(msg.text, msg.senderName, msg.senderId === currentUserId);
         });
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
 
-        socket.emit('getUsers', (users) => {
-            const roomMembers = users.filter(user => user.rooms.includes(roomId));
-            membersList.innerHTML = roomMembers.map(member =>
+    socket.emit('getUsers', (users) => {
+        const roomMembers = users.filter(user => user.rooms.includes(roomId));
+        membersList.innerHTML = roomMembers.map(member =>
             `<div class="d-flex flex-column align-items-center mb-1">
                 <div class="avatar-wrapper bg-dark text-white mb-1">
                     <i class="bi bi-person"></i>
                 </div>
                 <span>${member.username}</span>
             </div>`
-        ).join('');
-        });
+        ).join('') + 
+        `<button class="btn btn-outline bg-light add-member-btn ms-2">+</button>`;
+    });
     }
 
     function addMessage(text, sender, isMe) {

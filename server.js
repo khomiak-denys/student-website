@@ -138,10 +138,6 @@ const messageSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         default: null
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
     }
 });
 
@@ -150,7 +146,11 @@ const roomSchema = new mongoose.Schema({
     messages: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Message'
-    }]
+    }],
+    isGeneral: {
+        type: Boolean,
+        default: false
+    }
 });
 
 const User = mongoose.model('User', userSchema);
@@ -209,7 +209,7 @@ async function handleGetRoomMessages(res, roomId) {
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
-    socket.on('login', async ({ username }, callback) => {
+    socket.on(' ', async ({ username }, callback) => {
         try {
             let user = await User.findOne({ username });
             let generalRoom = await Room.findOne({});
@@ -241,7 +241,6 @@ io.on('connection', (socket) => {
             
             socket.join(generalRoom._id.toString());
             
-            // Надсилаємо оновлення списку учасників для загальної кімнати
             const roomUsers = await User.find({ rooms: generalRoom._id }).select('username _id');
             io.to(generalRoom._id.toString()).emit('updateMembers', {
                 roomId: generalRoom._id.toString(),
